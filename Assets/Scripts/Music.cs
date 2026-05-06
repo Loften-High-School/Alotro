@@ -21,7 +21,6 @@ public class Music : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
         if (Input.GetKeyDown("1"))
         {
             currentTrack = 1;
@@ -47,7 +46,6 @@ public class Music : MonoBehaviour
             currentTrack = 5;
             PlayNextTrack();
         }
-        */
     }
 
     public void PlayNextTrack()
