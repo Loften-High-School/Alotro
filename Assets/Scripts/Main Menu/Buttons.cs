@@ -4,13 +4,14 @@ using UnityEngine.SceneManagement;
 public class Buttons : MonoBehaviour
 {
 
-    public GameObject optionsMenu;
-    public GameObject collectionMenu;
+    public GameObject[] menus;
 
     public void Start()
     {
-        optionsMenu.SetActive(false);
-        collectionMenu.SetActive(false);
+        foreach (GameObject menu in menus)
+        {
+            menu.SetActive(false);
+        }
     }
 
     public void Play()
