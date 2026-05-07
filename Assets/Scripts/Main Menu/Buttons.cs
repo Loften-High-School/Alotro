@@ -15,7 +15,7 @@ public class Buttons : MonoBehaviour
 
     public void Play()
     {
-        //SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Game");
         Debug.Log("Play!");
     }
 
