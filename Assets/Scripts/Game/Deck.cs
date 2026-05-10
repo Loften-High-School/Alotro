@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
 
+    [Space]
     public PlayerGameInfo playerGameInfo;
 
     /*
@@ -20,8 +22,10 @@ public class Deck : MonoBehaviour
     Seals
     none = 0, gold, red, blue, purple
     */
+    [HideInInspector]
     public int cardInfo = 00000;
 
+    [Space] [Tooltip("All cards in the deck. Format: \n[suit, number 2 digits, enhancements, seal]")]
     public List<int> deck = new List<int>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

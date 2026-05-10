@@ -3,15 +3,22 @@ using UnityEngine;
 public class PlayerGameInfo : MonoBehaviour
 {
 
+    [Space] [Header("Game Info")] [Space]
     // All Game info
     public int hands;
     public int discards;
     public int ante;
     public int round;
-    public int roundScore;
-    public int blindScore;
+    public int roundScore; // Your Score
+    public int blindScore; // The Score you need to beat to win the round
     public int money;
 
+    [Header("Hand Info")] [Space]
+    // public string currentHand; // not implemented yet
+    public int chips;
+    public int mult;
+
+    [Header("Playing Cards")] [Space]
     public int handSize;
     public int hand;
     public int deckSize;

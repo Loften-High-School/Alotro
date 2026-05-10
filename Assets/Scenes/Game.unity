@@ -4442,6 +4442,8 @@ GameObject:
   - component: {fileID: 1030629548}
   - component: {fileID: 1030629552}
   - component: {fileID: 1030629553}
+  - component: {fileID: 1030629554}
+  - component: {fileID: 1030629555}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4468,6 +4470,8 @@ MonoBehaviour:
   roundScore: 0
   blindScore: 0
   money: 4
+  chips: 0
+  mult: 0
   handSize: 8
   hand: 0
   deckSize: 52
@@ -4539,6 +4543,8 @@ MonoBehaviour:
   money: {fileID: 1775546330}
   ante: {fileID: 1522326357}
   round: {fileID: 1927498271}
+  chips: {fileID: 1140924590}
+  mult: {fileID: 469097986}
   jokerSlots: {fileID: 1809326357}
   consumeSize: {fileID: 1180963709}
   handSize: {fileID: 554023735}
@@ -4555,7 +4561,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af5a4d0154ea638448dec4f92e7a8b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CP: {fileID: 1030629555}
   phase: 0
+--- !u!114 &1030629554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030629547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c5689e288b1814f8fc7f519980b742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PGI: {fileID: 1030629548}
+  winRound: 0
+--- !u!114 &1030629555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030629547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c091c32198113b40b2a1f3a367e048c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RG: {fileID: 1030629553}
+  PH: {fileID: 1030629554}
   ChooseBlind: {fileID: 775337068}
   BottomBar: {fileID: 649865318}
   CashOut: {fileID: 2093581099}
@@ -6345,7 +6380,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1364107170}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1030629554}
+        m_TargetAssemblyTypeName: PlayHand, Assembly-CSharp
+        m_MethodName: FindScore
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1364107170
 MonoBehaviour:
   m_ObjectHideFlags: 0

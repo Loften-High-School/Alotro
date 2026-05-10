@@ -5,8 +5,10 @@ using TMPro;
 public class SetGameInfo : MonoBehaviour
 {
 
+    [Space]
     public PlayerGameInfo PGI;
 
+    [Header("Game Info")] [Space]
     public TMP_Text blindScore;
     public TMP_Text roundScore;
     public TMP_Text hand;
@@ -15,6 +17,12 @@ public class SetGameInfo : MonoBehaviour
     public TMP_Text ante;
     public TMP_Text round;
 
+    [Header("Hand Info")] [Space]
+    // public TMP_Text currentHand; // not implemented yet
+    public TMP_Text chips;
+    public TMP_Text mult;
+
+    [Header("Playing Cards")] [Space]
     public TMP_Text jokerSlots;
     public TMP_Text consumeSize;
     public TMP_Text handSize;
@@ -37,6 +45,9 @@ public class SetGameInfo : MonoBehaviour
         money.text = PGI.money.ToString();
         ante.text = PGI.ante.ToString();
         round.text = PGI.round.ToString();
+
+        chips.text = PGI.chips.ToString();
+        mult.text = PGI.mult.ToString();
 
         jokerSlots.text = PGI.jokers + "/" + PGI.jokerSlots;
         consumeSize.text = PGI.consumeables + "/" + PGI.consumeSize;
