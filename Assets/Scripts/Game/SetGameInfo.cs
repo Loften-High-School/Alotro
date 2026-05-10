@@ -7,6 +7,7 @@ public class SetGameInfo : MonoBehaviour
 
     [Space]
     public PlayerGameInfo PGI;
+    public CashOut CO;
 
     [Header("Game Info")] [Space]
     public TMP_Text blindScore;
@@ -28,6 +29,9 @@ public class SetGameInfo : MonoBehaviour
     public TMP_Text handSize;
     public TMP_Text deckSize;
 
+    [Header("Other")] [Space]
+    public TMP_Text cashOut;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -42,10 +46,11 @@ public class SetGameInfo : MonoBehaviour
         roundScore.text = PGI.roundScore.ToString();
         hand.text = PGI.hands.ToString();
         discard.text = PGI.discards.ToString();
-        money.text = PGI.money.ToString();
+        money.text = "$" +PGI.money;
         ante.text = PGI.ante.ToString();
         round.text = PGI.round.ToString();
 
+        // Update Hand Info (Chips, Mult, and Current Hand) (not implemented yet)
         chips.text = PGI.chips.ToString();
         mult.text = PGI.mult.ToString();
 
@@ -54,6 +59,6 @@ public class SetGameInfo : MonoBehaviour
         handSize.text = PGI.hand + "/" + PGI.handSize;
         deckSize.text = PGI.deck + "/" + PGI.deckSize;
 
-        // Update Hand Info (Chips, Mult, and Current Hand) (not implemented yet)
+        cashOut.text = "Cash Out: $" + (CO.blindBonus + PGI.hands);
     }
 }

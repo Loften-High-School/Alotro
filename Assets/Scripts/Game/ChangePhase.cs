@@ -113,4 +113,10 @@ public class ChangePhase : MonoBehaviour
                 break;
         }
     }
+
+    public void NextPhase(int phase)
+    {
+        RG.phase = phase;
+        ChangeGamePhase();
+    }
 }

@@ -5,6 +5,7 @@ public class PlayHand : MonoBehaviour
 
     [Space]
     public PlayerGameInfo PGI;
+    public ChangePhase CP;
 
     [Space]
     public bool winRound;
@@ -18,7 +19,11 @@ public class PlayHand : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (winRound)
+        {
+            CP.NextPhase(3); // Cash Out Phase
+            winRound = false;
+        }
     }
 
     public void FindScore()

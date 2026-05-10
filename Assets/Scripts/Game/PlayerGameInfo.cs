@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerGameInfo : MonoBehaviour
@@ -11,6 +12,8 @@ public class PlayerGameInfo : MonoBehaviour
     public int round;
     public int roundScore; // Your Score
     public int blindScore; // The Score you need to beat to win the round
+    public string blindType; // Small Blind, Big Blind, Boss Blind
+    public int nextBlind;
     public int money;
 
     [Header("Hand Info")] [Space]
@@ -27,6 +30,11 @@ public class PlayerGameInfo : MonoBehaviour
     public int jokers;
     public int consumeSize;
     public int consumeables;
+
+    [Header("Covers")] [Space]
+    public GameObject smallBlindCover;
+    public GameObject bigBlindCover;
+    public GameObject bossBlindCover;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -49,6 +57,47 @@ public class PlayerGameInfo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (blindType == "Small Blind")
+        {
+            smallBlindCover.SetActive(false);
+            bigBlindCover.SetActive(true);
+            bossBlindCover.SetActive(true);
+        }
+        else if (blindType == "Big Blind")
+        {
+            smallBlindCover.SetActive(true);
+            bigBlindCover.SetActive(false);
+            bossBlindCover.SetActive(true);
+        }
+        else if (blindType == "Boss Blind")
+        {
+            smallBlindCover.SetActive(true);
+            bigBlindCover.SetActive(true);
+            bossBlindCover.SetActive(false);
+        }
+
+        if (nextBlind == 0)
+        {
+            blindType = "Small Blind";
+        }
+        else if (nextBlind == 1)
+        {
+            blindType = "Big Blind";
+        }
+        else if (nextBlind == 2)
+        {
+            blindType = "Boss Blind";
+        }
+    }
+
+    public void SetBlind(string type)
+    {
+        blindType = type;
+
+    }
+
+    public void SkipBlind(int next)
+    {
+        nextBlind = next;
     }
 }
