@@ -20,6 +20,12 @@ public class Buttons : MonoBehaviour
         Debug.Log("Play!");
     }
 
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("Start");
+        Debug.Log("Main Menu!");
+    }
+
     public void QuitGame()
     {
         Application.Quit();
