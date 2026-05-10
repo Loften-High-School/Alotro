@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Timeline;
 using UnityEngine.UI;
 using TMPro;
 using System;
@@ -7,22 +6,26 @@ using System;
 public class Music : MonoBehaviour
 {
 
+    [Header("Music")]
     public AudioSource audioSource;
     public AudioClip[] soundTrack;
     public int currentTrack = 1;
 
+    [Header("Sound Effects")]
     public AudioSource soundEffectsSource;
     public AudioClip[] soundEffects;
 
+    [Header("Slider")]
     public Slider gameSpeedSlider;
+    public Slider masterSlider;
+    public Slider musicSlider;
+    public Slider gameSlider;
+    
+    [Header("Text")]
     public TMP_Text gameSpeedText;
-
-    public Slider MasterVolumeSlider;
-    public TMP_Text MasterVolumeText;
-    public Slider MusicVolumeSlider;
-    public TMP_Text MusicVolumeText;
-    public Slider GameVolumeSlider;
-    public TMP_Text GameVolumeText;
+    public TMP_Text masterText;
+    public TMP_Text musicText;
+    public TMP_Text gameText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,12 +36,6 @@ public class Music : MonoBehaviour
         PlayNextTrack();
 
         gameSpeedSlider.value = 1;
-        MasterVolumeSlider.value = 100;
-        MusicVolumeSlider.value = 10;
-        GameVolumeSlider.value = 100;
-
-        audioSource.volume = MasterVolumeSlider.value * MusicVolumeSlider.value;
-        soundEffectsSource.volume = MasterVolumeSlider.value * GameVolumeSlider.value;
     }
 
     // Update is called once per frame
@@ -72,9 +69,9 @@ public class Music : MonoBehaviour
 
         // Set the text boxes to the current values of the sliders
         gameSpeedText.text = gameSpeedSlider.value.ToString("0.0") + "x";
-        MasterVolumeText.text = Math.Round(MasterVolumeSlider.value * 100f).ToString();
-        MusicVolumeText.text = Math.Round(MusicVolumeSlider.value * 100f).ToString();
-        GameVolumeText.text = Math.Round(GameVolumeSlider.value * 100f).ToString();
+        masterText.text = Math.Round(masterSlider.value * 100).ToString();
+        musicText.text = Math.Round(musicSlider.value * 100).ToString();
+        gameText.text = Math.Round(gameSlider.value * 100).ToString();
 
         UpdateVolume();
 
@@ -83,8 +80,8 @@ public class Music : MonoBehaviour
     public void UpdateVolume()
     {
         // Set the volume of the audio sources based on the slider values
-        audioSource.volume = MasterVolumeSlider.value * MusicVolumeSlider.value;
-        soundEffectsSource.volume = MasterVolumeSlider.value * GameVolumeSlider.value;
+        audioSource.volume = masterSlider.value * musicSlider.value;
+        soundEffectsSource.volume = masterSlider.value * gameSlider.value;
     }
 
     public void PlayNextTrack()
