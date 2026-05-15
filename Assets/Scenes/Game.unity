@@ -11070,6 +11070,7 @@ GameObject:
   - component: {fileID: 1030629556}
   - component: {fileID: 1030629557}
   - component: {fileID: 1030629558}
+  - component: {fileID: 1030629559}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -11089,8 +11090,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c24741505d42444c81b9e7dc6328d38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hands: 4
-  discards: 3
+  handsLeft: 4
+  discardsLeft: 4
   ante: 1
   round: 0
   roundScore: 0
@@ -11182,6 +11183,8 @@ MonoBehaviour:
   handSize: {fileID: 554023735}
   deckSize: {fileID: 1180318180}
   cashOut: {fileID: 1599804832}
+  targetScore: 2c01000058020000d007000070170000f82a0000a861000050c30000a0860100
+  blindTarget: 0
 --- !u!114 &1030629553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11195,7 +11198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CP: {fileID: 1030629555}
-  phase: 0
+  phase: 1
 --- !u!114 &1030629554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11282,6 +11285,21 @@ MonoBehaviour:
   handsText: {fileID: 1184516937}
   blindBonusText: {fileID: 5548487}
   handsBonusText: {fileID: 911672332}
+--- !u!114 &1030629559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030629547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f543ef09af5b3448faea5e6b4ebc3874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PGI: {fileID: 1030629548}
+  Deck: {fileID: 1030629550}
+  waitTime: 0.3
 --- !u!1 &1035979828
 GameObject:
   m_ObjectHideFlags: 0
@@ -16523,7 +16541,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1383812862
 Transform:
   m_ObjectHideFlags: 0

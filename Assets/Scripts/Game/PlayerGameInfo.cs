@@ -6,12 +6,12 @@ public class PlayerGameInfo : MonoBehaviour
 
     [Space] [Header("Game Info")] [Space]
     // All Game info
-    public int hands;
-    public int discards;
+    public int handsLeft;
+    public int discardsLeft;
     public int ante;
     public int round;
     public int roundScore; // Your Score
-    public int blindScore; // The Score you need to beat to win the round
+    public double blindScore; // The Score you need to beat to win the round
     public string blindType; // Small Blind, Big Blind, Boss Blind
     public int nextBlind;
     public int money;

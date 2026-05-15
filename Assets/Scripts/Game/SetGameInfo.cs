@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class SetGameInfo : MonoBehaviour
 {
@@ -32,6 +33,10 @@ public class SetGameInfo : MonoBehaviour
     [Header("Other")] [Space]
     public TMP_Text cashOut;
 
+    [Header("Variables"), Space]
+    public List<int> targetScore = new List<int> {300, 600, 2000, 6000, 11000, 25000, 50000, 100000};
+    public double blindTarget;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -44,8 +49,8 @@ public class SetGameInfo : MonoBehaviour
         // Update Game Info
         blindScore.text = PGI.blindScore.ToString();
         roundScore.text = PGI.roundScore.ToString();
-        hand.text = PGI.hands.ToString();
-        discard.text = PGI.discards.ToString();
+        hand.text = PGI.handsLeft.ToString();
+        discard.text = PGI.discardsLeft.ToString();
         money.text = "$" +PGI.money;
         ante.text = PGI.ante.ToString();
         round.text = PGI.round.ToString();
@@ -59,6 +64,26 @@ public class SetGameInfo : MonoBehaviour
         handSize.text = PGI.hand + "/" + PGI.handSize;
         deckSize.text = PGI.deck + "/" + PGI.deckSize;
 
-        cashOut.text = "Cash Out: $" + (CO.blindBonus + PGI.hands);
+        cashOut.text = "Cash Out: $" + (CO.blindBonus + PGI.handsLeft);
+
+        GetBlindScore();
+    }
+
+    void GetBlindScore()
+    {
+        if (PGI.blindType == "Small Blind")
+        {
+            blindTarget = targetScore[(PGI.ante - 1)];
+        }
+        else if (PGI.blindType == "Big Blind")
+        {
+            blindTarget = targetScore[(PGI.ante - 1)] * 1.5;
+        }
+        else if (PGI.blindType == "Boss Blind")
+        {
+            blindTarget = targetScore[(PGI.ante - 1)] * 2;
+        }
+
+        PGI.blindScore = blindTarget;
     }
 }

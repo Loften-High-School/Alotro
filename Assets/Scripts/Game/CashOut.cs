@@ -40,11 +40,11 @@ public class CashOut : MonoBehaviour
         }
 
         neededScoreText.text = PGI.blindScore.ToString();
-        handsText.text = PGI.hands.ToString();
+        handsText.text = PGI.handsLeft.ToString();
         
-        for (int i = 0; i < PGI.hands; i++)
+        for (int i = 0; i < PGI.handsLeft; i++)
         {
-            if (handsBonusText.text.Length < PGI.hands)
+            if (handsBonusText.text.Length < PGI.handsLeft)
             {
                 handsBonusText.text += "$";
             }
@@ -61,7 +61,7 @@ public class CashOut : MonoBehaviour
 
     public void CashOutRound()
     {
-        PGI.money += blindBonus + PGI.hands;
+        PGI.money += blindBonus + PGI.handsLeft;
         Debug.Log("Cashed Out! Current Money: " + PGI.money);
     }
 }
