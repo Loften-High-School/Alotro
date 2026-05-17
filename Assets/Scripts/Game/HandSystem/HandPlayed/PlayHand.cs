@@ -21,7 +21,7 @@ public class PlayHand : MonoBehaviour
     {
         if (winRound)
         {
-            CP.NextPhase(3); // Cash Out Phase
+            //CP.NextPhase(3); // Cash Out Phase
             winRound = false;
         }
     }

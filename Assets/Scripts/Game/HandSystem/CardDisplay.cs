@@ -56,4 +56,9 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
             rectTransform.anchoredPosition -= new Vector2(0, liftAmount);
         }
     }
+
+    public bool IsSelected()
+    {
+        return cardData.isSelected;
+    }
 }

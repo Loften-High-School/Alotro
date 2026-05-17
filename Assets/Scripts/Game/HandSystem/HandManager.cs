@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HandManager : MonoBehaviour
@@ -6,10 +7,14 @@ public class HandManager : MonoBehaviour
     [Header("Scripts")]
     public Hand handScript;
     public PlayerGameInfo PGI;
+    public HandRewardDatabase rewardDB;
 
     [Header("References")]
     public GameObject cardPrefab;
+    public GameObject floatingTextPrefab;
+    public Transform uiCanvas;
     public Transform handArea;
+    public Transform playZone;
 
     [Header("Hand Settings")]
     public List<CardData> hand = new List<CardData>();
@@ -19,6 +24,9 @@ public class HandManager : MonoBehaviour
     public float curveHeight = 50f;
     public float rotationAmount = 5f;
     public float liftAmount = 30f;
+
+    [Header("Play Settings")]
+    public float playSpacing = 150f;
 
     void Update()
     {
@@ -45,12 +53,62 @@ public class HandManager : MonoBehaviour
                 selected.Add(hand[i]);
         }
 
-        // 🧠 Evaluate hand
+        // Evaluate hand
         HandRank result = PokerHandEvaluator.EvaluateHand(selected);
 
-        Debug.Log("You played: " + result);
+        HandReward reward = rewardDB.GetReward(result);
+        PGI.chips += reward.chips;
+        PGI.mult = reward.mult;
 
-        // 🗑️ Remove selected cards
+        foreach (CardData card in selected)
+        {
+            PGI.chips += GetCardChipValue(card);
+        }
+
+        PGI.roundScore = PGI.chips * PGI.mult;
+
+        Debug.Log($"Hand: {result} | Chips: {PGI.chips} | Mult: {reward.mult} | Score: {PGI.roundScore}");
+
+        PGI.handsLeft -= 1;
+        StartCoroutine(ResolvePlay(selected));
+    }
+
+    System.Collections.IEnumerator ResolvePlay(List<CardData> selected)
+    {
+        List<GameObject> playedObjects = new List<GameObject>();
+    
+        foreach (Transform child in handArea)
+        {
+            CardDisplay cd = child.GetComponent<CardDisplay>();
+    
+            if (cd != null && cd.IsSelected())
+            {
+                playedObjects.Add(child.gameObject);
+            }
+        }
+
+        float center = (playedObjects.Count - 1) / 2f;
+
+        for (int i = 0; i < playedObjects.Count; i++)
+        {
+            RectTransform rt = playedObjects[i].GetComponent<RectTransform>();
+
+            rt.SetParent(playZone);
+
+            float x = (i - center) * playSpacing;
+
+            
+            rt.anchoredPosition = new Vector2(x, 0);
+            rt.localRotation = Quaternion.identity;
+        }
+    
+        yield return new WaitForSeconds(1.5f);
+
+        for (int i = 0; i < playedObjects.Count; i++)
+        {
+            Destroy(playedObjects[i]);
+        }
+    
         for (int i = hand.Count - 1; i >= 0; i--)
         {
             if (hand[i].isSelected)
@@ -59,13 +117,11 @@ public class HandManager : MonoBehaviour
                 PGI.hand -= 1;
             }
         }
-
-        DisplayHand();
-        StartCoroutine(handScript.RepeatProcedure()); // Remove later on
-        PGI.handsLeft -= 1;
+    
+        StartCoroutine(handScript.RepeatProcedure());
         SortHand();
         DisplayHand();
-    }
+    }   
 
     public void DiscardSelectedCards()
     {
@@ -141,7 +197,7 @@ public class HandManager : MonoBehaviour
         return 99;
     }
 
-public void ChangeSortMethod(bool sortByRank)
+    public void ChangeSortMethod(bool sortByRank)
     {
         this.sortByRank = sortByRank;
         SortHand();
@@ -195,5 +251,12 @@ public void ChangeSortMethod(bool sortByRank)
         }
 
         return count;
+    }
+
+    int GetCardChipValue(CardData card)
+    {
+        if (card.value == 1 || card.value == 13) return 11; // Ace or King
+        if (card.value == 12 || card.value == 11) return 10; // Queen or Jack
+        return card.value;
     }
 }
