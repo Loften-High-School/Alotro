@@ -6,6 +6,7 @@ public class Hand : MonoBehaviour
 
     public PlayerGameInfo PGI; // Hand Size
     public Deck Deck; // Cards in Deck
+    public HandManager handManager; // Hand Manager
 
     public float waitTime = 0.3f;
 
@@ -21,7 +22,7 @@ public class Hand : MonoBehaviour
         
     }
 
-    IEnumerator RepeatProcedure()  
+    public IEnumerator RepeatProcedure()  
     {
         while (true) 
         {
@@ -41,5 +42,10 @@ public class Hand : MonoBehaviour
     void DrawCard()
     {
         PGI.hand += 1;
+        
+        CardData card = Deck.deck[0];
+        Deck.deck.RemoveAt(0);
+
+        handManager.AddCard(card);
     }
 }

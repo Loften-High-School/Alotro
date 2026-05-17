@@ -1,46 +1,73 @@
 using System.Collections.Generic;
-using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
+    public HandManager handManager;
 
-    [Space]
-    public PlayerGameInfo playerGameInfo;
+    public Sprite[] cardSprites;
 
-    /*
-    5 digit # [suit, number 2 digits, enhancements, seal]
-    Suit 
-    1 = spades
-    2 = clubs
-    3 = hearts
-    4 = diamonds
-    Number
-    01-ace 02-10 11-jack 12-queen 13-king
-    Enhancements
-    normal = 0, bonus, mult, wild. glass, steel, stone, gold, lucky
-    Seals
-    none = 0, gold, red, blue, purple
-    */
-    [HideInInspector]
-    public int cardInfo = 00000;
+    public List<CardData> deck = new List<CardData>();
 
-    [Space] [Tooltip("All cards in the deck. Format: \n[suit, number 2 digits, enhancements, seal]")]
-    public List<int> deck = new List<int>();
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Default Deck
-        deck.AddRange(new int[] { 10100, 10200, 10300, 10400, 10500, 10600, 10700, 10800, 10900, 11000, 11100, 11200, 11300 }); // Adds spades
-        deck.AddRange(new int[] { 20100, 20200, 20300, 20400, 20500, 20600, 20700, 20800, 20900, 21000, 21100, 21200, 21300 }); // Adds clubs
-        deck.AddRange(new int[] { 30100, 30200, 30300, 30400, 30500, 30600, 30700, 30800, 30900, 31000, 31100, 31200, 31300 }); // Adds hearts
-        deck.AddRange(new int[] { 40100, 40200, 40300, 40400, 40500, 40600, 40700, 40800, 40900, 41000, 41100, 41200, 41300 }); // Adds diamonds
+        BuildDeck();
+        ShuffleDeck();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            DrawCard();
+        }
+    }
+
+    void BuildDeck()
+    {
+        deck.Clear();
+
+        string[] suits = { "Hearts", "Diamonds", "Clubs", "Spades" };
+
+        int index = 0;
+
+        for (int s = 0; s < suits.Length; s++)
+        {
+            for (int v = 1; v <= 13; v++)
+            {
+                CardData card = new CardData();
+                card.value = v;
+                card.suit = suits[s];
+
+                if (index < cardSprites.Length)
+                {
+                    card.sprite = cardSprites[index];
+                }
+
+                deck.Add(card);
+                index++;
+            }
+        }
+    }
+
+    void ShuffleDeck()
+    {
+        for (int i = 0; i < deck.Count; i++)
+        {
+            CardData temp = deck[i];
+            int randomIndex = Random.Range(i, deck.Count);
+            deck[i] = deck[randomIndex];
+            deck[randomIndex] = temp;
+        }
+    }
+
+    public void DrawCard()
+    {
+        if (deck.Count == 0) return;
+
+        CardData card = deck[0];
+        deck.RemoveAt(0);
+
+        handManager.AddCard(card);
     }
 }
