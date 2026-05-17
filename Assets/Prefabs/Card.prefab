@@ -165,4 +165,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   artwork: {fileID: 493860976720597632}
-  highlight: {fileID: 0}
+  highlight: {fileID: 1140873131413601263}
+  liftAmount: 30

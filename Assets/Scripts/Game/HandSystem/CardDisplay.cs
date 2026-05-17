@@ -30,6 +30,13 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!cardData.isSelected)
+        {
+            // ❌ block selection if already at 5
+            if (handManager.GetSelectedCount() >= 5)
+                return;
+        }
+
         cardData.isSelected = !cardData.isSelected;
         UpdateVisual();
     }

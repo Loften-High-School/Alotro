@@ -35,7 +35,7 @@ public class PlayHand : MonoBehaviour
             winRound = true;
             Debug.Log("You Win the Round!");
         }
-        else
+        else if (PGI.roundScore < PGI.blindScore && PGI.handsLeft == 0)
         {
             winRound = false;
             Debug.Log("You Lose the Round!");

@@ -1,9 +1,14 @@
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerGameInfo : MonoBehaviour
 {
 
+    [Space] [Header("References")] [Space]
+    public HandManager HandManager;
+    
     [Space] [Header("Game Info")] [Space]
     // All Game info
     public int handsLeft;
@@ -35,6 +40,12 @@ public class PlayerGameInfo : MonoBehaviour
     public GameObject smallBlindCover;
     public GameObject bigBlindCover;
     public GameObject bossBlindCover;
+    
+    [Space]
+    public Button playButton;
+    public Button discardButton;
+    public GameObject playCover;
+    public GameObject discardCover;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -88,6 +99,32 @@ public class PlayerGameInfo : MonoBehaviour
         {
             blindType = "Boss Blind";
         }
+
+        if (discardsLeft == 0 || !HasSelectedCards()) // Button inactive
+        {
+            discardCover.SetActive(true);
+            discardButton.interactable = false;
+            discardButton.image.color = new Color(210f / 255f, 210f / 255f, 210f / 255f, 255f / 255f); // Gray out the button #D2D2D2
+        }
+        else // Button active
+        {
+            discardCover.SetActive(false);
+            discardButton.interactable = true;
+            discardButton.image.color = new Color(236f / 255f, 83f / 255f, 83f / 255f, 255f / 255f); // Reset button color #EC5353
+        }
+
+        if (!HasSelectedCards()) // Button inactive
+        {
+            playCover.SetActive(true);
+            playButton.interactable = false;
+            playButton.image.color = new Color(210f / 255f, 210f / 255f, 210f / 255f, 255f / 255f); // Gray out the button #D2D2D2
+        }
+        else // Button active
+        {
+            playCover.SetActive(false);
+            playButton.interactable = true;
+            playButton.image.color = new Color(0f / 255f, 147f / 255f, 255f / 255f, 255f / 255f); // Reset button color #0093FF
+        }
     }
 
     public void SetBlind(string type)
@@ -99,5 +136,15 @@ public class PlayerGameInfo : MonoBehaviour
     public void SkipBlind(int next)
     {
         nextBlind = next;
+    }
+
+    bool HasSelectedCards()
+    {
+        foreach (CardData card in HandManager.hand)
+        {
+            if (card.isSelected)
+                return true;
+        }
+        return false;
     }
 }

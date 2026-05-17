@@ -60,6 +60,7 @@ Assets/Scripts/Game/
   CardDatabase.cs
   CardDisplay.cs
   HandManager.cs
+  PokerHandEvaluator.cs
  Jokers.cs
  PlayerGameInfo.cs
  PlayHand.cs
