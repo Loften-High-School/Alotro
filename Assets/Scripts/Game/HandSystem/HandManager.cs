@@ -45,33 +45,180 @@ public class HandManager : MonoBehaviour
 
     public void PlaySelectedCards()
     {
+        List<GameObject> selectedObjects = new List<GameObject>();
+
+        foreach (Transform child in handArea)
+        {
+            CardDisplay cd = child.GetComponent<CardDisplay>();
+
+            if (cd != null && cd.IsSelected())
+            {
+                selectedObjects.Add(child.gameObject);
+            }
+        }
+
+        HandRank result = PokerHandEvaluator.EvaluateHand(GetSelectedCardsData());
+
+        HandReward reward = rewardDB.GetReward(result);
+
+        StartCoroutine(ResolvePlayAnimated(selectedObjects, reward));
+    }
+
+    public List<CardData> GetSelectedCardsData()
+    {
         List<CardData> selected = new List<CardData>();
 
         for (int i = 0; i < hand.Count; i++)
         {
             if (hand[i].isSelected)
+            {
                 selected.Add(hand[i]);
+            }
         }
 
-        // Evaluate hand
-        HandRank result = PokerHandEvaluator.EvaluateHand(selected);
+        return selected;
+    }
 
-        HandReward reward = rewardDB.GetReward(result);
-        PGI.chips += reward.chips;
-        PGI.mult = reward.mult;
+    int GetCardChipValue(CardData card)
+    {
+        if (card.value == 1 || card.value == 13) return 11; // Ace or King
+        if (card.value == 12 || card.value == 11) return 10; // Queen or Jack
+        return card.value;
+    }
 
-        foreach (CardData card in selected)
+    int GetCardMult(CardData card)
+    {
+        return 0; // test value for now
+    }
+
+    int GetCardXMult(CardData card)
+    {
+        return 0; // test value for now
+    }
+
+    System.Collections.IEnumerator ResolvePlayAnimated(List<GameObject> cards, HandReward reward)
+    {
+        List<CardData> selectedData = GetSelectedCardsData();
+
+        float center = (cards.Count - 1) / 2f;
+
+        // -------------------------
+        // MOVE CARDS TO PLAY ZONE (SPREAD OUT)
+        // -------------------------
+        for (int i = 0; i < cards.Count; i++)
         {
-            PGI.chips += GetCardChipValue(card);
+            RectTransform rt = cards[i].GetComponent<RectTransform>();
+
+            rt.SetParent(playZone);
+
+            float x = (i - center) * playSpacing;
+
+            rt.anchoredPosition = new Vector2(x, 0);
+            rt.localRotation = Quaternion.identity;
         }
 
-        PGI.roundScore = PGI.chips * PGI.mult;
+        yield return new WaitForSeconds(1.3f);
 
-        Debug.Log($"Hand: {result} | Chips: {PGI.chips} | Mult: {reward.mult} | Score: {PGI.roundScore}");
+        // -------------------------
+        // SCORING CHAIN
+        // -------------------------
+
+
+        for (int i = 0; i < cards.Count; i++)
+        {
+            CardData card = selectedData[i];
+
+            int chipValue = GetCardChipValue(card);
+            int multValue = GetCardMult(card);
+            int xMultValue = GetCardXMult(card);
+
+            // -------------------------
+            // CHIPS
+            // -------------------------
+            PGI.chips += chipValue;
+            ShowFloatingText(cards[i].transform, "+" + chipValue);
+
+            yield return new WaitForSeconds(1.3f);
+
+            // -------------------------
+            // MULT (ADDITIVE)
+            // -------------------------
+            if (multValue != 0)
+            {
+                PGI.mult += multValue;
+                ShowFloatingText(cards[i].transform, "+" + multValue);
+
+                yield return new WaitForSeconds(1.3f);
+            }
+
+            // -------------------------
+            // XMULT (MULTIPLICATIVE)
+            // -------------------------
+            if (xMultValue != 0 && xMultValue != 1)
+            {
+                PGI.mult *= xMultValue;
+                ShowFloatingText(cards[i].transform, "x" + xMultValue);
+
+                yield return new WaitForSeconds(0.2f);
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        // -------------------------
+        // HAND BONUS
+        // -------------------------
+        PGI.chips += reward.chips;
+
+        yield return new WaitForSeconds(0.3f);
+
+        // -------------------------
+        // FINAL SCORE CALCULATION
+        // -------------------------
+        int finalScore = PGI.chips * PGI.mult;
+
+        PGI.roundScore += finalScore;
+
+        Debug.Log($"FINAL SCORE: {finalScore}");
+
+        yield return new WaitForSeconds(0.3f);
+
+        // -------------------------
+        // CLEANUP VISUALS
+        // -------------------------
+        for (int i = 0; i < cards.Count; i++)
+        {
+            Destroy(cards[i]);
+        }
+
+        for (int i = hand.Count - 1; i >= 0; i--)
+        {
+            if (hand[i].isSelected)
+            {
+                hand.RemoveAt(i);
+                PGI.hand -= 1;
+            }
+        }
 
         PGI.handsLeft -= 1;
-        StartCoroutine(ResolvePlay(selected));
+        StartCoroutine(handScript.RepeatProcedure());
+        SortHand();
+        DisplayHand();
     }
+
+    void ShowFloatingText(Transform target, string text)
+    {
+        GameObject obj = Instantiate(floatingTextPrefab, uiCanvas);
+
+        obj.transform.position = target.position + new Vector3(0, 100, 0);
+
+        obj.GetComponent<TMPro.TextMeshProUGUI>().text = text;
+
+        Destroy(obj, 1f);
+    }
+
+
+
 
     System.Collections.IEnumerator ResolvePlay(List<CardData> selected)
     {
@@ -134,8 +281,6 @@ public class HandManager : MonoBehaviour
                 PGI.hand -= 1;
             }
         }
-
-        DisplayHand();
 
         StartCoroutine(handScript.RepeatProcedure());
         PGI.discardsLeft -= 1;
@@ -251,12 +396,5 @@ public class HandManager : MonoBehaviour
         }
 
         return count;
-    }
-
-    int GetCardChipValue(CardData card)
-    {
-        if (card.value == 1 || card.value == 13) return 11; // Ace or King
-        if (card.value == 12 || card.value == 11) return 10; // Queen or Jack
-        return card.value;
     }
 }
