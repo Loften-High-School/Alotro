@@ -5,13 +5,11 @@ using UnityEngine.EventSystems;
 public class CardDisplay : MonoBehaviour, IPointerClickHandler
 {
     public Image artwork;
-    public Image highlight;
 
     private CardData cardData;
     private HandManager handManager;
 
     private RectTransform rectTransform;
-    private Vector2 originalPos;
 
     public float liftAmount = 30f;
 
@@ -32,20 +30,21 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
     {
         if (!cardData.isSelected)
         {
-            // ❌ block selection if already at 5
+            // block selection if already at 5
             if (handManager.GetSelectedCount() >= 5)
                 return;
         }
 
         cardData.isSelected = !cardData.isSelected;
         UpdateVisual();
+        if (handManager != null)
+        {
+            handManager.UpdateLiveHandPreview();
+        }
     }
 
     void UpdateVisual()
     {
-        if (highlight != null)
-            highlight.enabled = cardData.isSelected;
-
         // lift effect
         if (cardData.isSelected)
         {

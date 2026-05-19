@@ -1,6 +1,8 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
+using System;
+using TMPro;
 
 public class HandManager : MonoBehaviour
 {
@@ -8,13 +10,18 @@ public class HandManager : MonoBehaviour
     public Hand handScript;
     public PlayerGameInfo PGI;
     public HandRewardDatabase rewardDB;
+    public PlayHand PH;
 
     [Header("References")]
     public GameObject cardPrefab;
     public GameObject floatingTextPrefab;
+    public GameObject floatingSquarePrefab;
     public Transform uiCanvas;
     public Transform handArea;
     public Transform playZone;
+
+    [Space]
+    public TMP_Text currentHand;
 
     [Header("Hand Settings")]
     public List<CardData> hand = new List<CardData>();
@@ -30,10 +37,19 @@ public class HandManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+
+    }
+
+    public void DrawStartingHand()
+    {
+        PGI.roundScore = 0;
+
+        for (int i = 0; i < PGI.handSize; i++)
         {
-            PlaySelectedCards();
+            StartCoroutine(handScript.RepeatProcedure());
         }
+
+        DisplayHand();
     }
 
     public void AddCard(CardData card)
@@ -81,8 +97,8 @@ public class HandManager : MonoBehaviour
 
     int GetCardChipValue(CardData card)
     {
-        if (card.value == 1 || card.value == 13) return 11; // Ace or King
-        if (card.value == 12 || card.value == 11) return 10; // Queen or Jack
+        if (card.value == 1) return 11; // Ace
+        if (card.value == 13 || card.value == 12 || card.value == 11) return 10; // King, Queen, or Jack
         return card.value;
     }
 
@@ -91,14 +107,72 @@ public class HandManager : MonoBehaviour
         return 0; // test value for now
     }
 
-    int GetCardXMult(CardData card)
+    double GetCardXMult(CardData card)
     {
         return 0; // test value for now
     }
 
-    System.Collections.IEnumerator ResolvePlayAnimated(List<GameObject> cards, HandReward reward)
+    string GetHandDisplayName(HandRank rank)
+    {
+        switch (rank)
+        {
+            case HandRank.HighCard: return "High Card";
+            case HandRank.Pair: return "Pair";
+            case HandRank.TwoPair: return "Two Pair";
+            case HandRank.ThreeOfAKind: return "Three of a Kind";
+            case HandRank.Straight: return "Straight";
+            case HandRank.Flush: return "Flush";
+            case HandRank.FullHouse: return "Full House";
+            case HandRank.FourOfAKind: return "Four of a Kind";
+            case HandRank.StraightFlush: return "Straight Flush";
+            case HandRank.RoyalFlush: return "Royal Flush";
+            default: return "";
+        }
+    }
+
+    public void UpdateLiveHandPreview()
+    {
+        List<CardData> selected = new List<CardData>();
+
+        for (int i = 0; i < hand.Count; i++)
+        {
+            if (hand[i].isSelected)
+            {
+                selected.Add(hand[i]);
+            }
+        }
+
+        if (selected.Count == 0)
+        {
+            currentHand.text = "";
+            PGI.chips = 0;
+            PGI.mult = 0;
+            return;
+        }
+
+        HandRank rank = PokerHandEvaluator.EvaluateHand(selected);
+
+        currentHand.text = GetHandDisplayName(rank);
+        PGI.chips = rewardDB.GetReward(rank).chips;
+        PGI.mult = rewardDB.GetReward(rank).mult;
+    }
+
+    IEnumerator ResolvePlayAnimated(List<GameObject> cards, HandReward reward)
     {
         List<CardData> selectedData = GetSelectedCardsData();
+
+        currentHand.text = GetHandDisplayName(reward.handRank);
+
+        for (int i = hand.Count - 1; i >= 0; i--)
+        {
+            if (hand[i].isSelected)
+            {
+                hand.RemoveAt(i);
+                PGI.hand -= 1;
+            }
+        }
+
+        PGI.handsLeft --;
 
         float center = (cards.Count - 1) / 2f;
 
@@ -117,7 +191,9 @@ public class HandManager : MonoBehaviour
             rt.localRotation = Quaternion.identity;
         }
 
-        yield return new WaitForSeconds(1.3f);
+        DisplayHand();
+
+        yield return new WaitForSeconds(1f);
 
         // -------------------------
         // SCORING CHAIN
@@ -130,7 +206,7 @@ public class HandManager : MonoBehaviour
 
             int chipValue = GetCardChipValue(card);
             int multValue = GetCardMult(card);
-            int xMultValue = GetCardXMult(card);
+            double xMultValue = GetCardXMult(card);
 
             // -------------------------
             // CHIPS
@@ -156,51 +232,39 @@ public class HandManager : MonoBehaviour
             // -------------------------
             if (xMultValue != 0 && xMultValue != 1)
             {
-                PGI.mult *= xMultValue;
+                PGI.mult = Math.Round(PGI.mult * xMultValue, 2);
                 ShowFloatingText(cards[i].transform, "x" + xMultValue);
 
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(1.3f);
             }
 
             yield return new WaitForSeconds(0.1f);
         }
 
         // -------------------------
-        // HAND BONUS
-        // -------------------------
-        PGI.chips += reward.chips;
-
-        yield return new WaitForSeconds(0.3f);
-
-        // -------------------------
         // FINAL SCORE CALCULATION
         // -------------------------
-        int finalScore = PGI.chips * PGI.mult;
+        PGI.roundScore += Math.Round(PGI.chips * PGI.mult, 2);
 
-        PGI.roundScore += finalScore;
-
-        Debug.Log($"FINAL SCORE: {finalScore}");
+        Debug.Log($"FINAL SCORE: {PGI.roundScore}");
 
         yield return new WaitForSeconds(0.3f);
+
+        PH.FindScore();
 
         // -------------------------
         // CLEANUP VISUALS
         // -------------------------
+
+        PGI.chips = 0;
+        PGI.mult = 1;
+
         for (int i = 0; i < cards.Count; i++)
         {
             Destroy(cards[i]);
         }
 
-        for (int i = hand.Count - 1; i >= 0; i--)
-        {
-            if (hand[i].isSelected)
-            {
-                hand.RemoveAt(i);
-                PGI.hand -= 1;
-            }
-        }
-
-        PGI.handsLeft -= 1;
+        UpdateLiveHandPreview();
         StartCoroutine(handScript.RepeatProcedure());
         SortHand();
         DisplayHand();
@@ -208,67 +272,59 @@ public class HandManager : MonoBehaviour
 
     void ShowFloatingText(Transform target, string text)
     {
-        GameObject obj = Instantiate(floatingTextPrefab, uiCanvas);
+        GameObject obj = Instantiate(floatingTextPrefab, uiCanvas.transform);
+        GameObject square = Instantiate(floatingSquarePrefab, uiCanvas.transform);
 
-        obj.transform.position = target.position + new Vector3(0, 100, 0);
+        obj.transform.localScale = Vector3.one;
+        square.transform.localScale = Vector3.one;
 
-        obj.GetComponent<TMPro.TextMeshProUGUI>().text = text;
+        TMPro.TextMeshProUGUI tmp = obj.GetComponent<TMPro.TextMeshProUGUI>();
+        tmp.text = text;
 
-        Destroy(obj, 1f);
+        RectTransform canvasRect = uiCanvas.GetComponent<RectTransform>();
+        RectTransform textRect = obj.GetComponent<RectTransform>();
+        RectTransform squareRect = square.GetComponent<RectTransform>();
+
+        // STEP 1: get SCREEN position of card
+        Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(null, target.position);
+
+        // STEP 2: convert screen → canvas
+        Vector2 anchoredPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            screenPos,
+            null,
+            out anchoredPos
+        );
+
+        // STEP 3: PERFECT ALIGNMENT ABOVE CARD
+        textRect.anchoredPosition = anchoredPos + new Vector2(0, 150);
+        squareRect.anchoredPosition = anchoredPos + new Vector2(0, 150);
+
+        StartCoroutine(FloatUp(textRect));
+        StartCoroutine(FloatUp(squareRect));
+
+        
+
+        Destroy(obj, 2f);
     }
 
-
-
-
-    System.Collections.IEnumerator ResolvePlay(List<CardData> selected)
+    IEnumerator FloatUp(RectTransform rt)
     {
-        List<GameObject> playedObjects = new List<GameObject>();
-    
-        foreach (Transform child in handArea)
+        float time = 0f;
+        Vector2 start = rt.anchoredPosition;
+        Vector2 end = start + new Vector2(0, 50);
+
+        while (time < 1f)
         {
-            CardDisplay cd = child.GetComponent<CardDisplay>();
-    
-            if (cd != null && cd.IsSelected())
+            time += Time.deltaTime * 2f;
+            if (rt != null)
             {
-                playedObjects.Add(child.gameObject);
+                rt.anchoredPosition = Vector2.Lerp(start, end, time);
             }
+            yield return null;
         }
-
-        float center = (playedObjects.Count - 1) / 2f;
-
-        for (int i = 0; i < playedObjects.Count; i++)
-        {
-            RectTransform rt = playedObjects[i].GetComponent<RectTransform>();
-
-            rt.SetParent(playZone);
-
-            float x = (i - center) * playSpacing;
-
-            
-            rt.anchoredPosition = new Vector2(x, 0);
-            rt.localRotation = Quaternion.identity;
-        }
-    
-        yield return new WaitForSeconds(1.5f);
-
-        for (int i = 0; i < playedObjects.Count; i++)
-        {
-            Destroy(playedObjects[i]);
-        }
-    
-        for (int i = hand.Count - 1; i >= 0; i--)
-        {
-            if (hand[i].isSelected)
-            {
-                hand.RemoveAt(i);
-                PGI.hand -= 1;
-            }
-        }
-    
-        StartCoroutine(handScript.RepeatProcedure());
-        SortHand();
-        DisplayHand();
-    }   
+    }
 
     public void DiscardSelectedCards()
     {
@@ -321,6 +377,26 @@ public class HandManager : MonoBehaviour
             rt.anchoredPosition = new Vector2(x, y);
             rt.localRotation = Quaternion.Euler(0, 0, rot);
         }
+    }
+
+    public void ClearHand()
+    {
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = null;
+        #endif
+
+        // Destroy all card objects in hand area
+        for (int i = handArea.childCount - 1; i >= 0; i--)
+        {
+            Transform child = handArea.GetChild(i);
+            Destroy(child.gameObject, 0.01f);
+        }
+
+        // Clear data
+        hand.Clear();
+        PGI.hand = 0;
+
+        Debug.Log("Hand cleared");
     }
 
     int GetRankValue(CardData card)

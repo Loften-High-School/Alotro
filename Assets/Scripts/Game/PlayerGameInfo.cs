@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ public class PlayerGameInfo : MonoBehaviour
     public int discardsLeft;
     public int ante;
     public int round;
-    public int roundScore; // Your Score
+    public double roundScore; // Your Score
     public double blindScore; // The Score you need to beat to win the round
     public string blindType; // Small Blind, Big Blind, Boss Blind
     public int nextBlind;
@@ -23,8 +24,8 @@ public class PlayerGameInfo : MonoBehaviour
 
     [Header("Hand Info")] [Space]
     // public string currentHand; // not implemented yet
-    public int chips;
-    public int mult;
+    public double chips;
+    public double mult;
 
     [Header("Playing Cards")] [Space]
     public int handSize;
@@ -87,15 +88,15 @@ public class PlayerGameInfo : MonoBehaviour
             bossBlindCover.SetActive(false);
         }
 
-        if (nextBlind == 0)
+        if (nextBlind == 1)
         {
             blindType = "Small Blind";
         }
-        else if (nextBlind == 1)
+        else if (nextBlind == 2)
         {
             blindType = "Big Blind";
         }
-        else if (nextBlind == 2)
+        else if (nextBlind == 3)
         {
             blindType = "Boss Blind";
         }
@@ -130,7 +131,8 @@ public class PlayerGameInfo : MonoBehaviour
     public void SetBlind(string type)
     {
         blindType = type;
-
+        round ++;
+        HandManager.Invoke(nameof(HandManager.DrawStartingHand), 0.5f);
     }
 
     public void SkipBlind(int next)

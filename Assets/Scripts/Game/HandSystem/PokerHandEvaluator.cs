@@ -23,14 +23,14 @@ public static class PokerHandEvaluator
     public static HandRank EvaluateHand(List<CardData> cards)
     {
         if (cards == null || cards.Count == 0)
-            return HandRank.HighCard;
+            return default;
 
         List<int> values = cards.Select(c => GetRankValue(c)).ToList();
         List<string> suits = cards.Select(c => c.suit).ToList();
 
         values.Sort();
 
-        bool flush = suits.All(s => s == suits[0]);
+        bool flush = suits.All(s => s == suits[0]) && cards.Count == 5;
         bool straight = IsStraight(values);
 
         var groups = values.GroupBy(v => v)

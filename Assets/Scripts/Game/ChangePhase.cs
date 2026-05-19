@@ -6,6 +6,8 @@ public class ChangePhase : MonoBehaviour
     [Space]
     public RunGame RG;
     public PlayHand PH;
+    public HandManager HM;
+    public PlayerGameInfo PGI;
 
     [Header("Game Board")] [Space]
     // Central GameObjects
@@ -18,15 +20,21 @@ public class ChangePhase : MonoBehaviour
     [Header("Phase Info")] [Space]
     // Phase GameObjects
     public GameObject PhaseCB; // Phase Choose Blind
-    public GameObject PhasePB; // Phase Play Blind
+    public GameObject PhaseSB; // Phase Small Blind
+    public GameObject PhaseBigB; // Phase Big Blind
     public GameObject PhaseBB; // Phase Play Boss Blind
     public GameObject PhaseS; // Phase Shop
+
+    public GameObject ScoreNeeded;
+
+    [Space]
+    public int startGame;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        startGame = 1;
     }
 
     // Update is called once per frame
@@ -41,9 +49,12 @@ public class ChangePhase : MonoBehaviour
         {
             case 0: // Choose Blind Phase
                 PhaseCB.SetActive(true);
-                PhasePB.SetActive(false);
+                PhaseSB.SetActive(false);
+                PhaseBigB.SetActive(false);
                 PhaseBB.SetActive(false);
                 PhaseS.SetActive(false);
+
+                ScoreNeeded.SetActive(false);
 
                 ChooseBlind.SetActive(true);
                 BottomBar.SetActive(false);
@@ -53,21 +64,42 @@ public class ChangePhase : MonoBehaviour
                 break;
             case 1: // Play Blind Phase
                 PhaseCB.SetActive(false);
-                PhasePB.SetActive(true);
                 PhaseBB.SetActive(false);
                 PhaseS.SetActive(false);
+
+                if (PGI.nextBlind == 1)
+                {
+                    PhaseSB.SetActive(true);
+                    PhaseBigB.SetActive(false);
+                }
+                else if (PGI.nextBlind == 2)
+                {
+                    PhaseSB.SetActive(false);
+                    PhaseBigB.SetActive(true);
+                }
+
+                ScoreNeeded.SetActive(true);
 
                 ChooseBlind.SetActive(false);
                 BottomBar.SetActive(true);
                 CashOut.SetActive(false);
                 Shop.SetActive(false);
                 Booster.SetActive(false);
+
+                if (startGame == 1)
+                {
+                    StartGame();
+                    startGame = 2;
+                }
                 break;
             case 2: // Play Boss Blind Phase
                 PhaseCB.SetActive(false);
-                PhasePB.SetActive(false);
+                PhaseSB.SetActive(false);
+                PhaseBigB.SetActive(false);
                 PhaseBB.SetActive(true);
                 PhaseS.SetActive(false);
+
+                ScoreNeeded.SetActive(true);
 
                 ChooseBlind.SetActive(false);
                 BottomBar.SetActive(true);
@@ -77,9 +109,12 @@ public class ChangePhase : MonoBehaviour
                 break;
             case 3: // Cash Out Phase
                 PhaseCB.SetActive(false);
-                PhasePB.SetActive(false);
+                PhaseSB.SetActive(false);
+                PhaseBigB.SetActive(false);
                 PhaseBB.SetActive(false);
                 PhaseS.SetActive(false);
+
+                ScoreNeeded.SetActive(false);
 
                 ChooseBlind.SetActive(false);
                 BottomBar.SetActive(false);
@@ -89,9 +124,12 @@ public class ChangePhase : MonoBehaviour
                 break;
             case 4: // Shop Phase
                 PhaseCB.SetActive(false);
-                PhasePB.SetActive(false);
+                PhaseSB.SetActive(false);
+                PhaseBigB.SetActive(false);
                 PhaseBB.SetActive(false);
                 PhaseS.SetActive(true);
+
+                ScoreNeeded.SetActive(false);
 
                 ChooseBlind.SetActive(false);
                 BottomBar.SetActive(false);
@@ -101,9 +139,12 @@ public class ChangePhase : MonoBehaviour
                 break;
             case 5: // Booster Phase
                 PhaseCB.SetActive(false);
-                PhasePB.SetActive(false);
+                PhaseSB.SetActive(false);
+                PhaseBigB.SetActive(false);
                 PhaseBB.SetActive(false);
                 PhaseS.SetActive(true);
+
+                ScoreNeeded.SetActive(false);
 
                 ChooseBlind.SetActive(false);
                 BottomBar.SetActive(false);
@@ -118,5 +159,11 @@ public class ChangePhase : MonoBehaviour
     {
         RG.phase = phase;
         ChangeGamePhase();
+    }
+
+    void StartGame()
+    {
+        HM.ClearHand();
+        HM.DrawStartingHand();
     }
 }

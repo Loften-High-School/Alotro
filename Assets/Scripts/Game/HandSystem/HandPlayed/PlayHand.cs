@@ -6,6 +6,7 @@ public class PlayHand : MonoBehaviour
     [Space]
     public PlayerGameInfo PGI;
     public ChangePhase CP;
+    public HandManager handManager;
 
     [Space]
     public bool winRound;
@@ -21,19 +22,25 @@ public class PlayHand : MonoBehaviour
     {
         if (winRound)
         {
-            //CP.NextPhase(3); // Cash Out Phase
+            handManager.ClearHand();
+            Debug.Log("You Win the Round!");
+            CP.NextPhase(3); // Cash Out Phase
+            PGI.nextBlind ++;
+            if (PGI.nextBlind == 4)
+            {
+                PGI.nextBlind = 1;
+                PGI.ante ++;
+            }
             winRound = false;
         }
     }
 
     public void FindScore()
     {
-        PGI.roundScore = PGI.chips * PGI.mult;
-
         if (PGI.roundScore > PGI.blindScore)
         {
             winRound = true;
-            Debug.Log("You Win the Round!");
+            Debug.Log("You Won");
         }
         else if (PGI.roundScore < PGI.blindScore && PGI.handsLeft == 0)
         {

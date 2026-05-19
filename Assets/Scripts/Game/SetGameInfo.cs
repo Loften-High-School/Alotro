@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class SetGameInfo : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class SetGameInfo : MonoBehaviour
     [Space]
     public PlayerGameInfo PGI;
     public CashOut CO;
+    public HandManager HM;
+    public RunGame RG;
 
     [Header("Game Info")] [Space]
     public TMP_Text blindScore;
@@ -34,13 +37,18 @@ public class SetGameInfo : MonoBehaviour
     public TMP_Text cashOut;
 
     [Header("Variables"), Space]
-    public List<int> targetScore = new List<int> {300, 600, 2000, 6000, 11000, 25000, 50000, 100000};
+    List<int> targetScore = new List<int> {300, 800, 2000, 5000, 11000, 20000, 35000, 100000};
     public double blindTarget;
+
+    [Header("Choose Blind")] [Space]
+    public TMP_Text smallBlindTXT;
+    public TMP_Text bigBlindTXT;
+    public TMP_Text bossBlindTXT;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        HM.UpdateLiveHandPreview();
     }
 
     // Update is called once per frame
@@ -67,23 +75,35 @@ public class SetGameInfo : MonoBehaviour
         cashOut.text = "Cash Out: $" + (CO.blindBonus + PGI.handsLeft);
 
         GetBlindScore();
+
+        if (RG.phase == 0)
+        {
+            SelectBlindTXT();
+        }
     }
 
     void GetBlindScore()
     {
         if (PGI.blindType == "Small Blind")
         {
-            blindTarget = targetScore[(PGI.ante - 1)];
+            blindTarget = targetScore[PGI.ante - 1];
         }
         else if (PGI.blindType == "Big Blind")
         {
-            blindTarget = targetScore[(PGI.ante - 1)] * 1.5;
+            blindTarget = targetScore[PGI.ante - 1] * 1.5;
         }
         else if (PGI.blindType == "Boss Blind")
         {
-            blindTarget = targetScore[(PGI.ante - 1)] * 2;
+            blindTarget = targetScore[PGI.ante - 1] * 2;
         }
 
         PGI.blindScore = blindTarget;
+    }
+
+    void SelectBlindTXT()
+    {
+        smallBlindTXT.text = targetScore[PGI.ante - 1].ToString();
+        bigBlindTXT.text = (targetScore[PGI.ante - 1] * 1.5).ToString();
+        bossBlindTXT.text = (targetScore[PGI.ante - 1] * 2).ToString();
     }
 }

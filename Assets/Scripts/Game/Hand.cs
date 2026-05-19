@@ -7,6 +7,7 @@ public class Hand : MonoBehaviour
     public PlayerGameInfo PGI; // Hand Size
     public Deck Deck; // Cards in Deck
     public HandManager handManager; // Hand Manager
+    public RunGame runGame; // Run Game Script
 
     public float waitTime = 0.3f;
 
@@ -24,7 +25,7 @@ public class Hand : MonoBehaviour
 
     public IEnumerator RepeatProcedure()  
     {
-        while (true) 
+        for (int i = 0; i < PGI.handSize; i++)
         {
             CheckHand();
             yield return new WaitForSeconds(waitTime); // Wait for 1 second
@@ -33,7 +34,7 @@ public class Hand : MonoBehaviour
 
     void CheckHand()
     {
-        if (PGI.hand < PGI.handSize)
+        if (PGI.hand < PGI.handSize && (runGame.phase == 1 || runGame.phase == 2))
         {
             DrawCard();
         }
