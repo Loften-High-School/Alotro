@@ -7,6 +7,7 @@ public class PlayHand : MonoBehaviour
     public PlayerGameInfo PGI;
     public ChangePhase CP;
     public HandManager handManager;
+    public Deck deckScript;
 
     [Space]
     public bool winRound;
@@ -26,11 +27,12 @@ public class PlayHand : MonoBehaviour
             Debug.Log("You Win the Round!");
             CP.NextPhase(3); // Cash Out Phase
             PGI.nextBlind ++;
-            if (PGI.nextBlind == 4)
+            if (PGI.nextBlind == 4) // Loop back to small blind
             {
                 PGI.nextBlind = 1;
                 PGI.ante ++;
             }
+            deckScript.BuildDeck();
             winRound = false;
         }
     }

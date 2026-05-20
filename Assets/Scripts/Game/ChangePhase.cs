@@ -27,14 +27,10 @@ public class ChangePhase : MonoBehaviour
 
     public GameObject ScoreNeeded;
 
-    [Space]
-    public int startGame;
-
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        startGame = 1;
+        
     }
 
     // Update is called once per frame
@@ -85,12 +81,6 @@ public class ChangePhase : MonoBehaviour
                 CashOut.SetActive(false);
                 Shop.SetActive(false);
                 Booster.SetActive(false);
-
-                if (startGame == 1)
-                {
-                    StartGame();
-                    startGame = 2;
-                }
                 break;
             case 2: // Play Boss Blind Phase
                 PhaseCB.SetActive(false);
@@ -159,11 +149,5 @@ public class ChangePhase : MonoBehaviour
     {
         RG.phase = phase;
         ChangeGamePhase();
-    }
-
-    void StartGame()
-    {
-        HM.ClearHand();
-        HM.DrawStartingHand();
     }
 }

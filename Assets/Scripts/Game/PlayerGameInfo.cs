@@ -9,6 +9,7 @@ public class PlayerGameInfo : MonoBehaviour
 
     [Space] [Header("References")] [Space]
     public HandManager HandManager;
+    public Deck deckScript;
     
     [Space] [Header("Game Info")] [Space]
     // All Game info
@@ -132,7 +133,7 @@ public class PlayerGameInfo : MonoBehaviour
     {
         blindType = type;
         round ++;
-        HandManager.Invoke(nameof(HandManager.DrawStartingHand), 0.5f);
+        HandManager.Invoke(nameof(HandManager.DrawStartingHand), 1.5f);
     }
 
     public void SkipBlind(int next)

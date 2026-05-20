@@ -1,29 +1,22 @@
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
     public HandManager handManager;
-
-    public Sprite[] cardSprites;
+    public PlayerGameInfo PGI;
+    public CardDatabase CD;
 
     public List<CardData> deck = new List<CardData>();
 
     void Start()
     {
         BuildDeck();
-        ShuffleDeck();
+
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            DrawCard();
-        }
-    }
-
-    void BuildDeck()
+    public void BuildDeck()
     {
         deck.Clear();
 
@@ -39,15 +32,18 @@ public class Deck : MonoBehaviour
                 card.value = v;
                 card.suit = suits[s];
 
-                if (index < cardSprites.Length)
+                if (index < PGI.deck)
                 {
-                    card.sprite = cardSprites[index];
+                    card.sprite = CD.allCards[index].sprite;
                 }
 
                 deck.Add(card);
                 index++;
             }
         }
+
+        ShuffleDeck();
+        PGI.deck = deck.Count;
     }
 
     void ShuffleDeck()
@@ -59,15 +55,5 @@ public class Deck : MonoBehaviour
             deck[i] = deck[randomIndex];
             deck[randomIndex] = temp;
         }
-    }
-
-    public void DrawCard()
-    {
-        if (deck.Count == 0) return;
-
-        CardData card = deck[0];
-        deck.RemoveAt(0);
-
-        handManager.AddCard(card);
     }
 }

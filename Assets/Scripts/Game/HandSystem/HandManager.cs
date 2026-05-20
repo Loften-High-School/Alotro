@@ -43,17 +43,19 @@ public class HandManager : MonoBehaviour
     public void DrawStartingHand()
     {
         PGI.roundScore = 0;
+        PGI.handsLeft = 4;
+        PGI.discardsLeft = 4;
 
         for (int i = 0; i < PGI.handSize; i++)
         {
             StartCoroutine(handScript.RepeatProcedure());
+            DisplayHand();
         }
-
-        DisplayHand();
     }
 
     public void AddCard(CardData card)
     {
+        PGI.deck -= 1;
         hand.Add(card);
         SortHand();
         DisplayHand();
@@ -125,6 +127,9 @@ public class HandManager : MonoBehaviour
             case HandRank.FullHouse: return "Full House";
             case HandRank.FourOfAKind: return "Four of a Kind";
             case HandRank.StraightFlush: return "Straight Flush";
+            case HandRank.FiveOfAKind: return "Five of a Kind";
+            case HandRank.FlushHouse: return "Flush House";
+            case HandRank.FlushFive: return "Flush Five";
             case HandRank.RoyalFlush: return "Royal Flush";
             default: return "";
         }

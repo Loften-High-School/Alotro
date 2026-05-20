@@ -9,7 +9,7 @@ public class Hand : MonoBehaviour
     public HandManager handManager; // Hand Manager
     public RunGame runGame; // Run Game Script
 
-    public float waitTime = 0.3f;
+    public float waitTime;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,7 +28,7 @@ public class Hand : MonoBehaviour
         for (int i = 0; i < PGI.handSize; i++)
         {
             CheckHand();
-            yield return new WaitForSeconds(waitTime); // Wait for 1 second
+            yield return new WaitForSecondsRealtime(waitTime);
         }
     }
 
@@ -42,11 +42,18 @@ public class Hand : MonoBehaviour
 
     void DrawCard()
     {
-        PGI.hand += 1;
+        if (Deck.deck.Count > 0)
+        {
+            PGI.hand += 1;
         
-        CardData card = Deck.deck[0];
-        Deck.deck.RemoveAt(0);
+            CardData card = Deck.deck[0];
+            Deck.deck.RemoveAt(0);
 
-        handManager.AddCard(card);
+            handManager.AddCard(card);
+        }
+        else
+        {
+            Debug.Log("Deck is empty");
+        }
     }
 }
