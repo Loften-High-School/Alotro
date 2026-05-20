@@ -55,15 +55,15 @@ MonoBehaviour:
     isSelected: 0
   - value: 11
     suit: Clubs
-    sprite: {fileID: 0}
+    sprite: {fileID: 5976787148734541388, guid: 8162af784c3a4406fac4d20221ee3d34, type: 3}
     isSelected: 0
   - value: 12
     suit: Clubs
-    sprite: {fileID: 0}
+    sprite: {fileID: -5590334030559059320, guid: 7b1873347950a4c05a4186564978e1fb, type: 3}
     isSelected: 0
   - value: 13
     suit: Clubs
-    sprite: {fileID: 0}
+    sprite: {fileID: 5078020014594654884, guid: b4cde001963ac4d1fb66f41c58146b39, type: 3}
     isSelected: 0
   - value: 1
     suit: Diamonds
@@ -107,15 +107,15 @@ MonoBehaviour:
     isSelected: 0
   - value: 11
     suit: Diamonds
-    sprite: {fileID: 0}
+    sprite: {fileID: -5176599929761689705, guid: d06a52033595a43c78df1e63c55b1c4c, type: 3}
     isSelected: 0
   - value: 12
     suit: Diamonds
-    sprite: {fileID: 0}
+    sprite: {fileID: 8993507578091260687, guid: 99cf6d67ac75541b5b543745a734d4ad, type: 3}
     isSelected: 0
   - value: 13
     suit: Diamonds
-    sprite: {fileID: 0}
+    sprite: {fileID: 5800886802947584505, guid: cfee9c2b4585d4c1b86dd3ba2ac36a4e, type: 3}
     isSelected: 0
   - value: 1
     suit: Hearts
@@ -145,10 +145,6 @@ MonoBehaviour:
     suit: Hearts
     sprite: {fileID: -3492905767781626285, guid: 3e2fdee20ffb842649a14576f548a2a8, type: 3}
     isSelected: 0
-  - value: 0
-    suit: 
-    sprite: {fileID: 0}
-    isSelected: 0
   - value: 8
     suit: Hearts
     sprite: {fileID: 907865139605184882, guid: bd774d7161eaa4ee3bdbe64306b6e967, type: 3}
@@ -171,7 +167,7 @@ MonoBehaviour:
     isSelected: 0
   - value: 13
     suit: Hearts
-    sprite: {fileID: 0}
+    sprite: {fileID: -1182671411685260986, guid: a4bc9a2ae342a4a39b63b0d7263c2a74, type: 3}
     isSelected: 0
   - value: 1
     suit: Spades
@@ -215,13 +211,13 @@ MonoBehaviour:
     isSelected: 0
   - value: 11
     suit: Spades
-    sprite: {fileID: 0}
+    sprite: {fileID: -1963845882603784272, guid: 5ec103c801ae94e7582a23e5155d8100, type: 3}
     isSelected: 0
   - value: 12
     suit: Spades
-    sprite: {fileID: 0}
+    sprite: {fileID: 2577071026703369768, guid: 8e7fe5823cd084c6db81a2bbcd03180b, type: 3}
     isSelected: 0
-  - value: 13
+  - value: 12
     suit: Spades
-    sprite: {fileID: 0}
+    sprite: {fileID: -7740975881979942082, guid: 614fbadea6ecc4e8682eeca537cb72e0, type: 3}
     isSelected: 0
