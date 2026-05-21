@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc2e621f50f6b046925484498afb784, type: 3}
+  m_Name: JokerDatabase
+  m_EditorClassIdentifier: 
+  allJokers:
+  - name: Joker
+    description: <color=red>+4 </color>Mult
+    sprite: {fileID: 6421856297837412101, guid: 2849a810c36884cfcbee19f3de214f6f, type: 3}
+    isSelected: 0
+  - name: Blueprint
+    description: 
+    sprite: {fileID: -6289380360032574381, guid: 578880a32878541228388b88c50a6bee, type: 3}
+    isSelected: 0
+  - name: Brainstrom
+    description: 
+    sprite: {fileID: 8726140092430625625, guid: 838d8638026e04ff6b455f140266f823, type: 3}
+    isSelected: 0
+  - name: Hanging Chad
+    description: Retrigger <color=orange>first</color> played card used in scoring
+      <color=orange>2</color> additional times
+    sprite: {fileID: 2189546126938635531, guid: 298b0caa16a5d4cb38face196fd15d77, type: 3}
+    isSelected: 0
