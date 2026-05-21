@@ -43,7 +43,7 @@ public static class PokerHandEvaluator
         bool isRoyal = IsRoyal(values);
 
         // -------------------------
-        // 🔥 SPECIAL BALATRO HANDS
+        // SPECIAL BALATRO HANDS
         // -------------------------
 
         if (flush && isRoyal) return HandRank.RoyalFlush;

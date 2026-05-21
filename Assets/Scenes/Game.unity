@@ -11885,7 +11885,8 @@ MonoBehaviour:
   Deck: {fileID: 1030629550}
   handManager: {fileID: 1862818638}
   runGame: {fileID: 1030629553}
-  waitTime: 0.3
+  waitTime: 0.15
+  test: 0
 --- !u!1 &1035979828
 GameObject:
   m_ObjectHideFlags: 0
@@ -22053,6 +22054,7 @@ MonoBehaviour:
   handArea: {fileID: 1899176565}
   playZone: {fileID: 727731584}
   currentHand: {fileID: 1988124047}
+  loseGame: 0
   hand: []
   sortByRank: 1
   spacing: 150

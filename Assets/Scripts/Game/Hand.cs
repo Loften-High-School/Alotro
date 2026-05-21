@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
+using System;
 
 public class Hand : MonoBehaviour
 {
@@ -11,49 +13,76 @@ public class Hand : MonoBehaviour
 
     public float waitTime;
 
+    public bool test = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(RepeatProcedure());
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (test)
+        {
+            StartCoroutine(TestDrawCard());
+            test = false;
+        }
     }
 
-    public IEnumerator RepeatProcedure()  
+    public IEnumerator DrawCard()  
     {
         for (int i = 0; i < PGI.handSize; i++)
         {
-            CheckHand();
-            yield return new WaitForSecondsRealtime(waitTime);
+            if (PGI.hand < PGI.handSize && (runGame.phase == 1 || runGame.phase == 2))
+            {
+                if (Deck.deck.Count > 0)
+                {
+                    PGI.hand += 1;
+
+                    CardData card = Deck.deck[0];
+                    Deck.deck.RemoveAt(0);
+
+                    handManager.AddCard(card);
+                }
+                else
+                {
+                    handManager.OutOfCards();
+                    Debug.Log("<color=cyan>Check </color>Deck is empty");
+                    yield break;
+                }
+                Debug.Log("<color=orange>Testing out of cards break </color>");
+            }
+            yield return new WaitForSeconds(waitTime);
         }
     }
 
-    void CheckHand()
+    public IEnumerator TestDrawCard()
     {
-        if (PGI.hand < PGI.handSize && (runGame.phase == 1 || runGame.phase == 2))
-        {
-            DrawCard();
-        }
-    }
+        handManager.ClearHand();
 
-    void DrawCard()
-    {
-        if (Deck.deck.Count > 0)
+        for (int i = 0; i < PGI.handSize; i++)
         {
-            PGI.hand += 1;
-        
-            CardData card = Deck.deck[0];
-            Deck.deck.RemoveAt(0);
+            if (PGI.hand < PGI.handSize && (runGame.phase == 1 || runGame.phase == 2))
+            {
+                if (Deck.deck.Count > 0)
+                {
+                    PGI.hand += 1;
 
-            handManager.AddCard(card);
-        }
-        else
-        {
-            Debug.Log("Deck is empty");
+                    CardData card = Deck.deck[0];
+                    Deck.deck.RemoveAt(0);
+
+                    handManager.AddCard(card);
+                }
+                else
+                {
+                    handManager.OutOfCards();
+                    Debug.Log("<color=cyan>Check </color>Deck is empty");
+                    yield break;
+                }
+            }
+            yield return new WaitForSeconds(waitTime);
         }
     }
 }

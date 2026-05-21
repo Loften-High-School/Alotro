@@ -24,7 +24,7 @@ public class PlayHand : MonoBehaviour
         if (winRound)
         {
             handManager.ClearHand();
-            Debug.Log("You Win the Round!");
+            Debug.Log("<color=green>Win: </color>You Win the Round!");
             CP.NextPhase(3); // Cash Out Phase
             PGI.nextBlind ++;
             if (PGI.nextBlind == 4) // Loop back to small blind
@@ -42,12 +42,12 @@ public class PlayHand : MonoBehaviour
         if (PGI.roundScore > PGI.blindScore)
         {
             winRound = true;
-            Debug.Log("You Won");
+            Debug.Log("<color=green>Win: </color>You Won");
         }
         else if (PGI.roundScore < PGI.blindScore && PGI.handsLeft == 0)
         {
             winRound = false;
-            Debug.Log("You Lose the Round!");
+            Debug.Log("<color=red>Lost: </color>Low Points");
         }
     }
 }

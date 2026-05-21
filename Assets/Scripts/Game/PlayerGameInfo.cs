@@ -133,7 +133,7 @@ public class PlayerGameInfo : MonoBehaviour
     {
         blindType = type;
         round ++;
-        HandManager.Invoke(nameof(HandManager.DrawStartingHand), 1.5f);
+        HandManager.Invoke(nameof(HandManager.DrawStartingHand), 1f);
     }
 
     public void SkipBlind(int next)

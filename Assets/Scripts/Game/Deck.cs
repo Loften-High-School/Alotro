@@ -13,14 +13,13 @@ public class Deck : MonoBehaviour
     void Start()
     {
         BuildDeck();
-
     }
 
     public void BuildDeck()
     {
         deck.Clear();
 
-        string[] suits = { "Hearts", "Diamonds", "Clubs", "Spades" };
+        string[] suits = { "Clubs", "Diamonds", "Hearts", "Spades" };
 
         int index = 0;
 
@@ -31,11 +30,7 @@ public class Deck : MonoBehaviour
                 CardData card = new CardData();
                 card.value = v;
                 card.suit = suits[s];
-
-                if (index < PGI.deck)
-                {
-                    card.sprite = CD.allCards[index].sprite;
-                }
+                card.sprite = CD.allCards[index].sprite;
 
                 deck.Add(card);
                 index++;

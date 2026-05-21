@@ -23,6 +23,9 @@ public class HandManager : MonoBehaviour
     [Space]
     public TMP_Text currentHand;
 
+    [Header("Temp in script"), Space]
+    public bool loseGame;
+
     [Header("Hand Settings")]
     public List<CardData> hand = new List<CardData>();
     public bool sortByRank = true;
@@ -35,22 +38,13 @@ public class HandManager : MonoBehaviour
     [Header("Play Settings")]
     public float playSpacing = 150f;
 
-    void Update()
-    {
-
-    }
-
     public void DrawStartingHand()
     {
         PGI.roundScore = 0;
         PGI.handsLeft = 4;
         PGI.discardsLeft = 4;
 
-        for (int i = 0; i < PGI.handSize; i++)
-        {
-            StartCoroutine(handScript.RepeatProcedure());
-            DisplayHand();
-        }
+        StartCoroutine(handScript.DrawCard());
     }
 
     public void AddCard(CardData card)
@@ -251,7 +245,7 @@ public class HandManager : MonoBehaviour
         // -------------------------
         PGI.roundScore += Math.Round(PGI.chips * PGI.mult, 2);
 
-        Debug.Log($"FINAL SCORE: {PGI.roundScore}");
+        Debug.Log($"<color=yellow>Values: </color>FINAL SCORE: {PGI.roundScore}");
 
         yield return new WaitForSeconds(0.3f);
 
@@ -270,7 +264,7 @@ public class HandManager : MonoBehaviour
         }
 
         UpdateLiveHandPreview();
-        StartCoroutine(handScript.RepeatProcedure());
+        StartCoroutine(handScript.DrawCard());
         SortHand();
         DisplayHand();
     }
@@ -343,10 +337,20 @@ public class HandManager : MonoBehaviour
             }
         }
 
-        StartCoroutine(handScript.RepeatProcedure());
+        StartCoroutine(handScript.DrawCard());
         PGI.discardsLeft -= 1;
         SortHand();
         DisplayHand();
+    }
+
+    public void OutOfCards() // Lose condition for when you completly run out of cards
+    {
+        if (PGI.deck <= 0 && hand.Count <= 0)
+        {
+            loseGame = true;
+            StopCoroutine(handScript.DrawCard());
+            Debug.Log("<color=red>Lost: </color>Out of Cards");
+        }
     }
 
     public void DisplayHand()
@@ -401,7 +405,7 @@ public class HandManager : MonoBehaviour
         hand.Clear();
         PGI.hand = 0;
 
-        Debug.Log("Hand cleared");
+        Debug.Log("<color=cyan>Check: </color>Hand cleared");
     }
 
     int GetRankValue(CardData card)
