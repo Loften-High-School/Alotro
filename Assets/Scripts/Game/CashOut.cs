@@ -6,6 +6,7 @@ public class CashOut : MonoBehaviour
 
     [Space]
     public PlayerGameInfo PGI;
+    public Shop shop;
 
     [Space]
     public int blindBonus;
@@ -62,6 +63,7 @@ public class CashOut : MonoBehaviour
     public void CashOutRound()
     {
         PGI.money += blindBonus + PGI.handsLeft;
-        Debug.Log("Cashed Out! Current Money: " + PGI.money);
+        shop.rerollCost = 5;
+        Debug.Log($"<color=yellow>Values: </color>Cashed Out! Current Money: $<color=yellow>{PGI.money}</color>");
     }
 }

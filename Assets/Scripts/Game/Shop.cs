@@ -7,7 +7,7 @@ public class Shop : MonoBehaviour
     public PlayerGameInfo PGI;
 
     [Space]
-    public int rerollCost = 5;
+    public int rerollCost;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,6 +26,7 @@ public class Shop : MonoBehaviour
         if (PGI.money >= rerollCost)
         {
             PGI.money -= rerollCost;
+            rerollCost += 1;
             Debug.Log("Rerolled Shop!");
         }
         else

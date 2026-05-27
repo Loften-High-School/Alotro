@@ -12,6 +12,7 @@ public class SetGameInfo : MonoBehaviour
     public CashOut CO;
     public HandManager HM;
     public RunGame RG;
+    public Shop shop;
 
     [Header("Game Info")] [Space]
     public TMP_Text blindScore;
@@ -45,6 +46,9 @@ public class SetGameInfo : MonoBehaviour
     public TMP_Text bigBlindTXT;
     public TMP_Text bossBlindTXT;
 
+    [Header("Shop"), Space]
+    public TMP_Text rerollCostTXT;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -73,6 +77,8 @@ public class SetGameInfo : MonoBehaviour
         deckSize.text = PGI.deck + "/" + PGI.deckSize;
 
         cashOut.text = "Cash Out: $" + (CO.blindBonus + PGI.handsLeft);
+
+        rerollCostTXT.text = "Reroll \n$" + shop.rerollCost;
 
         GetBlindScore();
 

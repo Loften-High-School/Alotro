@@ -245,7 +245,7 @@ public class HandManager : MonoBehaviour
         // -------------------------
         PGI.roundScore += Math.Round(PGI.chips * PGI.mult, 2);
 
-        Debug.Log($"<color=yellow>Values: </color>FINAL SCORE: {PGI.roundScore}");
+        Debug.Log($"<color=yellow>Values: </color>FINAL SCORE: <color=yellow>{PGI.roundScore}</color>");
 
         yield return new WaitForSeconds(0.3f);
 
@@ -284,10 +284,10 @@ public class HandManager : MonoBehaviour
         RectTransform textRect = obj.GetComponent<RectTransform>();
         RectTransform squareRect = square.GetComponent<RectTransform>();
 
-        // STEP 1: get SCREEN position of card
+        // get SCREEN position of card
         Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(null, target.position);
 
-        // STEP 2: convert screen → canvas
+        // convert screen → canvas
         Vector2 anchoredPos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,
@@ -296,7 +296,7 @@ public class HandManager : MonoBehaviour
             out anchoredPos
         );
 
-        // STEP 3: PERFECT ALIGNMENT ABOVE CARD
+        // PERFECT ALIGNMENT ABOVE CARD
         textRect.anchoredPosition = anchoredPos + new Vector2(0, 150);
         squareRect.anchoredPosition = anchoredPos + new Vector2(0, 150);
 
@@ -305,7 +305,7 @@ public class HandManager : MonoBehaviour
 
         
 
-        Destroy(obj, 2f);
+        Destroy(obj, 0.3f);
     }
 
     IEnumerator FloatUp(RectTransform rt)

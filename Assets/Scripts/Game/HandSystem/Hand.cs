@@ -52,7 +52,6 @@ public class Hand : MonoBehaviour
                     Debug.Log("<color=cyan>Check </color>Deck is empty");
                     yield break;
                 }
-                Debug.Log("<color=orange>Testing out of cards break </color>");
             }
             yield return new WaitForSeconds(waitTime);
         }

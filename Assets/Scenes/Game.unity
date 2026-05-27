@@ -2317,8 +2317,8 @@ Transform:
   m_GameObject: {fileID: 266624415}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5274463, y: 1.5274463, z: 1.5274463}
+  m_LocalPosition: {x: -0.21443, y: 0, z: 0.45859}
+  m_LocalScale: {x: 1.4464458, y: 1.4464458, z: 1.4464458}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 104086250}
@@ -6197,15 +6197,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 568185829}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.45859}
+  m_LocalScale: {x: 0.94697, y: 0.94697, z: 0.94697}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1528490685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 14.5577, y: -97}
+  m_AnchoredPosition: {x: 13.571, y: -115.8}
   m_SizeDelta: {x: 897.0362, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &570379118
@@ -7187,8 +7187,8 @@ Transform:
   m_GameObject: {fileID: 639507339}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -960, y: -501.44595, z: 0}
-  m_LocalScale: {x: 1.5597075, y: 1.5597075, z: 1.5597075}
+  m_LocalPosition: {x: -909.3, y: -474.85, z: 0.45859}
+  m_LocalScale: {x: 1.4769962, y: 1.4769962, z: 1.4769962}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1383812862}
@@ -8221,15 +8221,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 727731583}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.45859}
+  m_LocalScale: {x: 0.94697, y: 0.94697, z: 0.94697}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1528490685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 150, y: 70}
+  m_AnchoredPosition: {x: 141.83, y: 66.288}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &731858832
@@ -8662,8 +8662,8 @@ Transform:
   m_GameObject: {fileID: 755854946}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.21443, y: 0, z: 0.45859}
+  m_LocalScale: {x: 0.94697, y: 0.94697, z: 0.94697}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 649865319}
@@ -10038,6 +10038,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 911672330}
   m_CullTransparentMesh: 1
+--- !u!1 &915656870
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 915656871}
+  m_Layer: 0
+  m_Name: JokerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &915656871
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915656870}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 714.4066, y: 369.5289, z: -5.0194087}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &923480304
 GameObject:
   m_ObjectHideFlags: 0
@@ -11780,6 +11811,7 @@ MonoBehaviour:
   CO: {fileID: 1030629558}
   HM: {fileID: 1862818638}
   RG: {fileID: 1030629553}
+  shop: {fileID: 1030629557}
   blindScore: {fileID: 891564332}
   roundScore: {fileID: 1796657993}
   hand: {fileID: 1041268445}
@@ -11798,6 +11830,7 @@ MonoBehaviour:
   smallBlindTXT: {fileID: 1714072953}
   bigBlindTXT: {fileID: 2108104903}
   bossBlindTXT: {fileID: 81941538}
+  rerollCostTXT: {fileID: 2092643786}
 --- !u!114 &1030629553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11899,6 +11932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PGI: {fileID: 1030629548}
+  shop: {fileID: 1030629557}
   blindBonus: 0
   neededScoreText: {fileID: 649294192}
   handsText: {fileID: 1184516937}
@@ -20427,8 +20461,8 @@ Transform:
   m_GameObject: {fileID: 1764140598}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -960, y: -481, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -909.3, y: -455.49, z: 0.45859}
+  m_LocalScale: {x: 0.94697, y: 0.94697, z: 0.94697}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 971598618}
@@ -22611,15 +22645,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1899176564}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.45859}
+  m_LocalScale: {x: 0.94697, y: 0.94697, z: 0.94697}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1528490685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 150, y: 284}
+  m_AnchoredPosition: {x: 141.83, y: 292.89}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1903839470
@@ -23717,8 +23751,8 @@ Transform:
   m_GameObject: {fileID: 1982215521}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -960, y: -481, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -909.3, y: -455.49, z: 0.45859}
+  m_LocalScale: {x: 0.94697, y: 0.94697, z: 0.94697}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 272565207}
@@ -26259,4 +26293,5 @@ SceneRoots:
   - {fileID: 570379121}
   - {fileID: 1030629551}
   - {fileID: 1862818639}
+  - {fileID: 915656871}
   - {fileID: 1581786550}
