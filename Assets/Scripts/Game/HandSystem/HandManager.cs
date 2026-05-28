@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using TMPro;
+using System.Linq;
 
 public class HandManager : MonoBehaviour
 {
@@ -69,11 +70,30 @@ public class HandManager : MonoBehaviour
             }
         }
 
-        HandRank result = PokerHandEvaluator.EvaluateHand(GetSelectedCardsData());
+        List<CardData> cardDataList = new List<CardData>();
 
-        HandReward reward = rewardDB.GetReward(result);
+        foreach (GameObject obj in selectedObjects)
+        {
+            CardDisplay display = obj.GetComponent<CardDisplay>();
 
-        StartCoroutine(ResolvePlayAnimated(selectedObjects, reward));
+            if (display != null)
+            {
+                cardDataList.Add(display.cardData);
+            }
+        }
+
+        HandResult result = PokerHandEvaluator.EvaluateHand(cardDataList);
+
+        Debug.Log($"<color=cyan>Checks: </color>Hand:  <color=cyan>{result.rank}</color>");
+
+        foreach (var card in result.scoringCards)
+        {
+            Debug.Log($"<color=cyan>Checks: </color>Scoring: <color=cyan>{card.value}</color>  of <color=cyan>{card.suit}</color>");
+        }
+
+        HandReward reward = rewardDB.GetReward(result.rank);
+
+        StartCoroutine(ResolvePlayAnimated(selectedObjects, result.scoringCards, reward));
     }
 
     public List<CardData> GetSelectedCardsData()
@@ -149,17 +169,15 @@ public class HandManager : MonoBehaviour
             return;
         }
 
-        HandRank rank = PokerHandEvaluator.EvaluateHand(selected);
+        HandResult rank = PokerHandEvaluator.EvaluateHand(selected);
 
-        currentHand.text = GetHandDisplayName(rank);
-        PGI.chips = rewardDB.GetReward(rank).chips;
-        PGI.mult = rewardDB.GetReward(rank).mult;
+        currentHand.text = GetHandDisplayName(rank.rank);
+        PGI.chips = rewardDB.GetReward(rank.rank).chips;
+        PGI.mult = rewardDB.GetReward(rank.rank).mult;
     }
 
-    IEnumerator ResolvePlayAnimated(List<GameObject> cards, HandReward reward)
+    IEnumerator ResolvePlayAnimated(List<GameObject> cards, List<CardData> scoringCards, HandReward reward)
     {
-        List<CardData> selectedData = GetSelectedCardsData();
-
         currentHand.text = GetHandDisplayName(reward.handRank);
 
         for (int i = hand.Count - 1; i >= 0; i--)
@@ -199,9 +217,9 @@ public class HandManager : MonoBehaviour
         // -------------------------
 
 
-        for (int i = 0; i < cards.Count; i++)
+        for (int i = 0; i < scoringCards.Count; i++)
         {
-            CardData card = selectedData[i];
+            CardData card = scoringCards[i];
 
             int chipValue = GetCardChipValue(card);
             int multValue = GetCardMult(card);
@@ -211,7 +229,11 @@ public class HandManager : MonoBehaviour
             // CHIPS
             // -------------------------
             PGI.chips += chipValue;
-            ShowFloatingText(cards[i].transform, "+" + chipValue);
+            GameObject chips = cards.First(c =>
+                c.GetComponent<CardDisplay>().cardData == card
+            );
+
+            ShowFloatingText(chips.transform, "+" + chipValue);
 
             yield return new WaitForSeconds(1.3f);
 
@@ -222,6 +244,11 @@ public class HandManager : MonoBehaviour
             {
                 PGI.mult += multValue;
                 ShowFloatingText(cards[i].transform, "+" + multValue);
+                GameObject mult = cards.First(c =>
+                    c.GetComponent<CardDisplay>().cardData == card
+                );
+
+                ShowFloatingText(mult.transform, "+" + multValue);
 
                 yield return new WaitForSeconds(1.3f);
             }
@@ -233,11 +260,16 @@ public class HandManager : MonoBehaviour
             {
                 PGI.mult = Math.Round(PGI.mult * xMultValue, 2);
                 ShowFloatingText(cards[i].transform, "x" + xMultValue);
+                GameObject xMult = cards.First(c =>
+                    c.GetComponent<CardDisplay>().cardData == card
+                );
+
+                ShowFloatingText(xMult.transform, "+" + xMultValue);
 
                 yield return new WaitForSeconds(1.3f);
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.3f);
         }
 
         // -------------------------

@@ -6,7 +6,7 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
 {
     public Image artwork;
 
-    private CardData cardData;
+    public CardData cardData;
     private HandManager handManager;
 
     private RectTransform rectTransform;
