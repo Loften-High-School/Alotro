@@ -4,6 +4,7 @@ using System.Collections;
 using System;
 using TMPro;
 using System.Linq;
+using Unity.Mathematics;
 
 public class HandManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class HandManager : MonoBehaviour
     public PlayerGameInfo PGI;
     public HandRewardDatabase rewardDB;
     public PlayHand PH;
+    public JokerSystem jokerSystem;
 
     [Header("References")]
     public GameObject cardPrefab;
@@ -221,9 +223,9 @@ public class HandManager : MonoBehaviour
         {
             CardData card = scoringCards[i];
 
-            int chipValue = GetCardChipValue(card);
-            int multValue = GetCardMult(card);
-            double xMultValue = GetCardXMult(card);
+            int chipValue = jokerSystem.ApplyChips(GetCardChipValue(card), card);
+            int multValue = jokerSystem.ApplyMult(GetCardMult(card), card);
+            double xMultValue = jokerSystem.ApplyXMult((double)GetCardXMult(card), card);
 
             // -------------------------
             // CHIPS

@@ -12,21 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cc2e621f50f6b046925484498afb784, type: 3}
   m_Name: JokerDatabase
   m_EditorClassIdentifier: 
-  allJokers:
-  - name: Joker
-    description: <color=red>+4 </color>Mult
-    sprite: {fileID: 6421856297837412101, guid: 2849a810c36884cfcbee19f3de214f6f, type: 3}
-    isSelected: 0
-  - name: Blueprint
-    description: 
-    sprite: {fileID: -6289380360032574381, guid: 578880a32878541228388b88c50a6bee, type: 3}
-    isSelected: 0
-  - name: Brainstrom
-    description: 
-    sprite: {fileID: 8726140092430625625, guid: 838d8638026e04ff6b455f140266f823, type: 3}
-    isSelected: 0
-  - name: Hanging Chad
-    description: Retrigger <color=orange>first</color> played card used in scoring
-      <color=orange>2</color> additional times
-    sprite: {fileID: 2189546126938635531, guid: 298b0caa16a5d4cb38face196fd15d77, type: 3}
-    isSelected: 0
+  jokers:
+  - {fileID: 11400000, guid: a55df03590d696047abbbd91030b1ee9, type: 2}
+  - {fileID: 11400000, guid: 3fd65f52e852717459738a01acb71672, type: 2}
+  - {fileID: 11400000, guid: 2a514ca008eb573409775770ee5848cc, type: 2}
+  - {fileID: 11400000, guid: dd783f10e30f3924f8820066cd46d46a, type: 2}

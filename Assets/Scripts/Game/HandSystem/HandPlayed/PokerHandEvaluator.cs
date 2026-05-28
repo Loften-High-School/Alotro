@@ -33,6 +33,8 @@ public static class PokerHandEvaluator
             };
         }
 
+        bool isFiveCardHand = cards.Count == 5;
+
         // Sort cards by value
         var sorted = cards.OrderBy(c => c.value).ToList();
 
@@ -70,7 +72,7 @@ public static class PokerHandEvaluator
         }
 
         // Straight Flush
-        if (isStraight && isFlush)
+        if (isStraight && isFlush && isFiveCardHand)
         {
             // Royal Flush check
             if (sorted.Min(c => c.value) == 10)
@@ -118,7 +120,7 @@ public static class PokerHandEvaluator
         }
 
         // Flush
-        if (isFlush)
+        if (isFlush && isFiveCardHand)
         {
             result.rank = HandRank.Flush;
             result.scoringCards = cards;
@@ -126,7 +128,7 @@ public static class PokerHandEvaluator
         }
 
         // Straight
-        if (isStraight)
+        if (isStraight && isFiveCardHand)
         {
             result.rank = HandRank.Straight;
             result.scoringCards = cards;
