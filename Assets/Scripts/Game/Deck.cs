@@ -19,17 +19,17 @@ public class Deck : MonoBehaviour
     {
         deck.Clear();
 
-        string[] suits = { "Clubs", "Diamonds", "Hearts", "Spades" };
-
         int index = 0;
 
-        for (int s = 0; s < suits.Length; s++)
+        foreach (Suit suit in System.Enum.GetValues(typeof(Suit)))
         {
             for (int v = 1; v <= 13; v++)
             {
                 CardData card = new CardData();
-                card.value = v;
-                card.suit = suits[s];
+                
+                card.value = (Rank)v;
+                card.suit = suit;
+                
                 card.sprite = CD.allCards[index].sprite;
 
                 deck.Add(card);
@@ -37,7 +37,7 @@ public class Deck : MonoBehaviour
             }
         }
 
-        ShuffleDeck();
+        //ShuffleDeck();
         PGI.deck = deck.Count;
     }
 

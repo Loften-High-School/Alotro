@@ -6,7 +6,7 @@ public class CardDatabase : ScriptableObject
 {
     public List<CardData> allCards;
 
-    public CardData GetCard(int value, string suit)
+    public CardData GetCard(Rank value, Suit suit)
     {
         return allCards.Find(c => c.value == value && c.suit == suit);
     }

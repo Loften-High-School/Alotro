@@ -13,7 +13,7 @@ public class HandManager : MonoBehaviour
     public PlayerGameInfo PGI;
     public HandRewardDatabase rewardDB;
     public PlayHand PH;
-    public JokerSystem jokerSystem;
+    public JokerManager JM;
 
     [Header("References")]
     public GameObject cardPrefab;
@@ -111,13 +111,6 @@ public class HandManager : MonoBehaviour
         }
 
         return selected;
-    }
-
-    int GetCardChipValue(CardData card)
-    {
-        if (card.value == 1) return 11; // Ace
-        if (card.value == 13 || card.value == 12 || card.value == 11) return 10; // King, Queen, or Jack
-        return card.value;
     }
 
     int GetCardMult(CardData card)
@@ -223,9 +216,9 @@ public class HandManager : MonoBehaviour
         {
             CardData card = scoringCards[i];
 
-            int chipValue = jokerSystem.ApplyChips(GetCardChipValue(card), card);
-            int multValue = jokerSystem.ApplyMult(GetCardMult(card), card);
-            double xMultValue = jokerSystem.ApplyXMult((double)GetCardXMult(card), card);
+            float chipValue = JM.ApplyChipsOnScoredJokers(PGI.chips, card);
+            int multValue = 1;
+            double xMultValue = 1;
 
             // -------------------------
             // CHIPS
@@ -445,8 +438,8 @@ public class HandManager : MonoBehaviour
     int GetRankValue(CardData card)
     {
         // Ace is high
-        if (card.value == 1) return 14;
-        return card.value;
+        if (card.value == Rank.Ace) return 14;
+        return (int)card.value;
     }
 
     int GetSuitOrder(string suit)
@@ -478,7 +471,7 @@ public class HandManager : MonoBehaviour
     {
         hand.Sort((a, b) =>
         {
-            int suitCompare = GetSuitOrder(a.suit).CompareTo(GetSuitOrder(b.suit));
+            int suitCompare = GetSuitOrder(a.suit.ToString()).CompareTo(GetSuitOrder(b.suit.ToString()));
 
             if (suitCompare == 0)
             {

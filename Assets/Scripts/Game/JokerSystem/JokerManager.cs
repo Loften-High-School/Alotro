@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NUnit.Framework.Internal;
 using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +17,11 @@ public class JokerManager : MonoBehaviour
 
     [Header("Variables"), Space]
     public List<JokerData> ownedJokers = new List<JokerData>();
+    public List<GameObject> jokerObjects = new List<GameObject>();
 
     public float jokerSpacing = 150f;
+
+    public bool test = false;
     
     public void GiveJoker(int index) // DEBUG: give joker by index
     {
@@ -41,13 +45,14 @@ public class JokerManager : MonoBehaviour
             return;
         }
 
-        ownedJokers.Add(data);
         SpawnJoker(data);
     }
 
     public void SpawnJoker(JokerData data) // Spawns UI object
     {
         GameObject obj = Instantiate(jokerPrefab, jokerArea, false);
+        ownedJokers.Add(data);
+        jokerObjects.Add(obj);
         PGI.jokers ++;
 
         JokerDisplay display = obj.GetComponent<JokerDisplay>();
@@ -57,6 +62,17 @@ public class JokerManager : MonoBehaviour
         if (lg != null) lg.enabled = false;
 
         ArrangeJokers();
+    }
+
+    public void RemoveJoker(int index)
+    {
+        if (index < 0 || index >= jokerObjects.Count) return;
+
+        Destroy(jokerObjects[index]);
+
+        jokerObjects.RemoveAt(index);
+        ownedJokers.RemoveAt(index);
+        PGI.jokers --;
     }
 
     public void ArrangeJokers()
@@ -87,13 +103,39 @@ public class JokerManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2)) GiveJoker(1);
         if (Input.GetKeyDown(KeyCode.Alpha3)) GiveJoker(2);
         if (Input.GetKeyDown(KeyCode.Alpha4)) GiveJoker(3);
+
+        if (test == true) 
+        {
+            for (int i = ownedJokers.Count; i >= 0; i--) 
+            {    
+                RemoveJoker(i);
+            }
+            test = false;
+        }
+        
     }
 
-    public int ApplyChipModifiers(int chips, CardData card)
+    public float ApplyChipsOnScoredJokers(float chips, CardData card)
     {
         foreach (var joker in ownedJokers)
         {
-            chips = jokerSystem.ApplyChips(chips, card);
+            if (joker.activation != Activation.OnScored)
+            continue;
+
+            // IMPORTANT: check card condition
+            if (!jokerSystem.DoesCardMatch(joker, card))
+                continue;
+
+            switch (joker.type)
+            {
+                case JokerType.AddChips:
+                    chips += joker.value;
+                    break;
+
+                case JokerType.AddMult:
+                    // handle later
+                    break;
+            }
         }
 
         return chips;
@@ -103,7 +145,7 @@ public class JokerManager : MonoBehaviour
     {
         foreach (var joker in ownedJokers)
         {
-            mult = jokerSystem.ApplyMult(mult, card);
+            //mult = jokerSystem.ApplyMult(mult, card);
         }
 
         return mult;
@@ -113,7 +155,7 @@ public class JokerManager : MonoBehaviour
     {
         foreach (var joker in ownedJokers)
         {
-            xmult = jokerSystem.ApplyXMult(xmult, card);;
+            //xmult = jokerSystem.ApplyXMult(xmult, card);;
         }
 
         return xmult;

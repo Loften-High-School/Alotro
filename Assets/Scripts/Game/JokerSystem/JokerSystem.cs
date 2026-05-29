@@ -5,81 +5,99 @@ public class JokerSystem : MonoBehaviour
 {
     public JokerManager jokerManager;
 
-    // CHIPS
-    public int ApplyChips(int baseChips, CardData card)
-    {
-        int value = baseChips;
+    public int chips;
+    public int mult;
 
+    public void RunJokerPhase(Activation phase, CardData card, HandRank rank)
+    {
         foreach (var joker in jokerManager.ownedJokers)
         {
-            value = ApplyJokerChipEffect(joker, value, card);
-        }
+            if (joker == null) continue;
+            if (joker.activation != phase && joker.activation != Activation.Mixed) continue;
 
-        return value;
+            ApplyJoker(joker, phase, card, rank);
+        }
     }
 
-    // MULT
-    public int ApplyMult(int baseMult, CardData card)
-    {
-        int value = baseMult;
-
-        foreach (var joker in jokerManager.ownedJokers)
-        {
-            value = ApplyJokerMultEffect(joker, value, card);
-        }
-
-        return value;
-    }
-
-    // X MULT
-    public double ApplyXMult(double baseXMult, CardData card)
-    {
-        double value = baseXMult;
-
-        foreach (var joker in jokerManager.ownedJokers)
-        {
-            value = ApplyJokerXMultEffect(joker, value, card);
-        }
-
-        return value;
-    }
-
-    private int ApplyJokerChipEffect(JokerData joker, int value, CardData card)
+    void ApplyJoker(JokerData joker, Activation phase, CardData card, HandRank rank)
     {
         switch (joker.type)
         {
             case JokerType.AddChips:
-                return value + (int)joker.value;
+                
+                HandleAddChips(joker, phase, card, rank);
+                break;
 
-            default:
-                return value;
-        }
-    }
-    
-    private int ApplyJokerMultEffect(JokerData joker, int value, CardData card)
-    {
-        switch (joker.type)
-        {
             case JokerType.AddMult:
-                return value + (int)joker.value;
+                mult += (int)joker.value;
+                break;
 
-            case JokerType.FirstCardBonus:
-                return value + 2;
-
-            default:
-                return value;
+            case JokerType.XMult:
+                mult = (int)(mult * joker.value);
+                break;
         }
     }
 
-    private double ApplyJokerXMultEffect(JokerData joker, double value, CardData card)
+    void HandleAddChips(JokerData joker, Activation phase, CardData card, HandRank rank)
     {
-        switch (joker.type)
+        switch (joker.activation)
         {
-            case JokerType.MultiplyX:
-                return value * joker.value;
+            case Activation.Independent:
+                if (phase == Activation.Independent)
+                    chips += (int)joker.value;
+                break;
+
+            case Activation.OnScored:
+                if (phase == Activation.OnScored)
+                    chips += (int)joker.value;
+                break;
+
+            case Activation.Mixed:  
+                // Example:
+                if (phase == Activation.OnScored)
+                    joker.value += joker.value;
+
+                if (phase == Activation.Independent)
+                    chips += (int)joker.value * 2;
+
+                break;
+        }
+    }
+
+    public bool DoesCardMatch(JokerData joker, CardData card)
+    {
+        switch (joker.condition)
+        {
+            case CardCondition.Any:
+                return true;
+
+            case CardCondition.FaceCard:
+                return card.value == Rank.Jack ||
+                       card.value == Rank.Queen ||
+                       card.value == Rank.King;
+
+            case CardCondition.Odd:
+                return card.value == Rank.Ace ||
+                       card.value == Rank.Nine ||
+                       card.value == Rank.Seven ||
+                       card.value == Rank.Five ||
+                       card.value == Rank.Three;
+
+            case CardCondition.Even:
+                return card.value == Rank.Two ||
+                    card.value == Rank.Four ||
+                    card.value == Rank.Six ||
+                    card.value == Rank.Eight ||
+                    card.value == Rank.Ten;
+
+            case CardCondition.SpecificRank:
+                return card.value == joker.targetRank;
+
+            case CardCondition.SpecificSuit:
+                return card.suit == joker.targetSuit;
 
             default:
-                return value;
+                return false;
         }
     }
 }

@@ -10089,7 +10089,9 @@ MonoBehaviour:
   jokerArea: {fileID: 568185830}
   jokerPrefab: {fileID: 7922971157555651730, guid: 0ac2b274ad40ba740942f4625499e9fe, type: 3}
   ownedJokers: []
+  jokerObjects: []
   jokerSpacing: 150
+  test: 0
 --- !u!114 &915656873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10103,6 +10105,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jokerManager: {fileID: 915656872}
+  chips: 0
+  mult: 0
 --- !u!1 &923480304
 GameObject:
   m_ObjectHideFlags: 0
@@ -22151,7 +22155,7 @@ MonoBehaviour:
   PGI: {fileID: 1030629548}
   rewardDB: {fileID: 1862818640}
   PH: {fileID: 1030629554}
-  jokerSystem: {fileID: 915656873}
+  JM: {fileID: 915656872}
   cardPrefab: {fileID: 5640789585292038555, guid: 88520e50128693e41a78faa7913db383, type: 3}
   floatingTextPrefab: {fileID: 4240868885346143070, guid: ff1caa31887ae1a428db02c139bfe345, type: 3}
   floatingSquarePrefab: {fileID: 524259909488571781, guid: e861df922fd9005429e1c4373ac82520, type: 3}

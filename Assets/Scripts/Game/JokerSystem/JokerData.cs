@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Joker", menuName = "Jokers/Joker Data")]
-public class JokerData : ScriptableObject
+[System.Serializable]
+public class JokerData
 {
     public string jokerName;
     public string description;
@@ -12,6 +13,11 @@ public class JokerData : ScriptableObject
     public float value;
 
     public JokerType type;
+    public Activation activation;
+    
+    public CardCondition condition;
+    public Rank targetRank;
+    public Suit targetSuit;
 
     public bool isSelected;
 }

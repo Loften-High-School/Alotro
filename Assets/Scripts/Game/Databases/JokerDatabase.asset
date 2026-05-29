@@ -13,7 +13,51 @@ MonoBehaviour:
   m_Name: JokerDatabase
   m_EditorClassIdentifier: 
   jokers:
-  - {fileID: 11400000, guid: a55df03590d696047abbbd91030b1ee9, type: 2}
-  - {fileID: 11400000, guid: 3fd65f52e852717459738a01acb71672, type: 2}
-  - {fileID: 11400000, guid: 2a514ca008eb573409775770ee5848cc, type: 2}
-  - {fileID: 11400000, guid: dd783f10e30f3924f8820066cd46d46a, type: 2}
+  - jokerName: Joker
+    description: 
+    artwork: {fileID: 6421856297837412101, guid: 2849a810c36884cfcbee19f3de214f6f, type: 3}
+    price: 2
+    rarity: Common
+    value: 4
+    type: 0
+    activation: 4
+    condition: 0
+    targetRank: 0
+    targetSuit: 0
+    isSelected: 0
+  - jokerName: Hanging Chad
+    description: 
+    artwork: {fileID: 2189546126938635531, guid: 298b0caa16a5d4cb38face196fd15d77, type: 3}
+    price: 4
+    rarity: Common
+    value: 2
+    type: 0
+    activation: 2
+    condition: 1
+    targetRank: 0
+    targetSuit: 0
+    isSelected: 0
+  - jokerName: Brainstrom
+    description: 
+    artwork: {fileID: 8726140092430625625, guid: 838d8638026e04ff6b455f140266f823, type: 3}
+    price: 10
+    rarity: Rare
+    value: 10
+    type: 0
+    activation: 5
+    condition: 0
+    targetRank: 0
+    targetSuit: 0
+    isSelected: 0
+  - jokerName: Blueprint
+    description: 
+    artwork: {fileID: -6289380360032574381, guid: 578880a32878541228388b88c50a6bee, type: 3}
+    price: 10
+    rarity: Rare
+    value: 1
+    type: 0
+    activation: 4
+    condition: 2
+    targetRank: 0
+    targetSuit: 0
+    isSelected: 0

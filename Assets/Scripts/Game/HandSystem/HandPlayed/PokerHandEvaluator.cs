@@ -36,7 +36,7 @@ public static class PokerHandEvaluator
         bool isFiveCardHand = cards.Count == 5;
 
         // Sort cards by value
-        var sorted = cards.OrderBy(c => c.value).ToList();
+        var sorted = cards.OrderBy(c => GetRankValue(c)).ToList();
 
         // Group by value
         var valueGroups = cards.GroupBy(c => c.value)
@@ -50,6 +50,12 @@ public static class PokerHandEvaluator
 
         bool isFlush = suitGroups.First().Count() == cards.Count;
         bool isStraight = IsStraight(sorted);
+        bool isRoyal =
+                sorted.Any(c => c.value == Rank.Ten) &&
+                sorted.Any(c => c.value == Rank.Jack) &&
+                sorted.Any(c => c.value == Rank.Queen) &&
+                sorted.Any(c => c.value == Rank.King) &&
+                sorted.Any(c => c.value == Rank.Ace);
 
         // =========================
         // SPECIAL HANDS FIRST
@@ -75,7 +81,7 @@ public static class PokerHandEvaluator
         if (isStraight && isFlush && isFiveCardHand)
         {
             // Royal Flush check
-            if (sorted.Min(c => c.value) == 10)
+            if (isRoyal)
             {
                 result.rank = HandRank.RoyalFlush;
             }
@@ -168,13 +174,30 @@ public static class PokerHandEvaluator
         return result;
     }
 
+    static int GetRankValue(CardData card)
+    {
+        if (card.value == Rank.Ace) return 14;
+
+        return (int)card.value;
+    }
+
     private static bool IsStraight(List<CardData> sorted)
     {
-        for (int i = 0; i < sorted.Count - 1; i++)
+        var values = sorted
+            .Select(GetRankValue)
+            .Distinct()
+            .OrderBy(v => v)
+            .ToList();
+
+        if (values.Count != sorted.Count)
+            return false;
+
+        for (int i = 0; i < values.Count - 1; i++)
         {
-            if (sorted[i + 1].value != sorted[i].value + 1)
+            if (values[i + 1] != values[i] + 1)
                 return false;
         }
+
         return true;
     }
 }

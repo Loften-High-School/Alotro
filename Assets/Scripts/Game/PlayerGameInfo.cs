@@ -25,7 +25,7 @@ public class PlayerGameInfo : MonoBehaviour
 
     [Header("Hand Info")] [Space]
     // public string currentHand; // not implemented yet
-    public double chips;
+    public float chips;
     public double mult;
 
     [Header("Playing Cards")] [Space]
