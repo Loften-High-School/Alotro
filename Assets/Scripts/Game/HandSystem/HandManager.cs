@@ -205,20 +205,28 @@ public class HandManager : MonoBehaviour
 
         DisplayHand();
 
+        JokerSystem.HandContext context = new JokerSystem.HandContext
+        {
+            handRank = reward.handRank,
+            scoringCards = scoringCards
+        };
+
         yield return new WaitForSeconds(1f);
 
         // -------------------------
         // SCORING CHAIN
         // -------------------------
 
+        JM.OnPlayedJoker(scoringCards, context);
 
         for (int i = 0; i < scoringCards.Count; i++)
         {
             CardData card = scoringCards[i];
 
-            float chipValue = JM.ApplyChipsOnScoredJokers(PGI.chips, card);
-            int multValue = 1;
-            double xMultValue = 1;
+            float chipValue = 0;
+            chipValue = JM.ApplyChipsOnScoredJokers(card, context);
+            int multValue = 0;
+            double xMultValue = 0;
 
             // -------------------------
             // CHIPS
@@ -270,7 +278,11 @@ public class HandManager : MonoBehaviour
         // -------------------------
         // FINAL SCORE CALCULATION
         // -------------------------
+        currentHand.text = Math.Round(PGI.chips * PGI.mult, 2).ToString();
+        yield return new WaitForSeconds(1f);
+        
         PGI.roundScore += Math.Round(PGI.chips * PGI.mult, 2);
+        currentHand.text = "";
 
         Debug.Log($"<color=yellow>Values: </color>FINAL SCORE: <color=yellow>{PGI.roundScore}</color>");
 

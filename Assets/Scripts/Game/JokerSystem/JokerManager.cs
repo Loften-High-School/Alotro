@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using NUnit.Framework.Internal;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class JokerManager : MonoBehaviour
 {
@@ -115,15 +114,18 @@ public class JokerManager : MonoBehaviour
         
     }
 
-    public float ApplyChipsOnScoredJokers(float chips, CardData card)
+    
+    public float ApplyChipsOnScoredJokers(CardData card, JokerSystem.HandContext context)
     {
+        float chips = GetBaseChipValue(card);
+
         foreach (var joker in ownedJokers)
         {
             if (joker.activation != Activation.OnScored)
             continue;
 
             // IMPORTANT: check card condition
-            if (!jokerSystem.DoesCardMatch(joker, card))
+            if (!jokerSystem.DoesCardMatch(joker, card, context))
                 continue;
 
             switch (joker.type)
@@ -139,6 +141,105 @@ public class JokerManager : MonoBehaviour
         }
 
         return chips;
+    }
+    
+
+    public void OnPlayedJoker(List<CardData> cards, JokerSystem.HandContext context)
+    {
+
+        foreach (var joker in ownedJokers)
+        {
+            if (joker.activation != Activation.OnPlayed && 
+                joker.activation != Activation.Mixed)
+                continue;
+            
+            if (!DoesJokerMeetCondition(joker, context))
+            {
+                Debug.Log("<color=cyan>Checks: </color>Meet <color=red>Not</color> Conditions");
+                continue;
+            }
+
+            Debug.Log("<color=cyan>Checks: </color>Meet Conditions"); // From DoesJokerMeetCondition()
+            switch (joker.type)
+            {
+                case JokerType.Effect:
+                    OnPlayedEffects(); // Later add arguments like: joker, card, context
+                    break;
+                
+                case JokerType.Economy:
+                    PGI.money += (int)joker.value;
+                    break;
+            }
+        }
+    }
+
+    void OnPlayedEffects() // Not here yet
+    {
+        
+    }
+
+    bool DoesJokerMeetCondition(JokerData joker , JokerSystem.HandContext context)
+    {
+        switch (joker.condition)
+        {
+            case CardCondition.Any:
+                return true;
+            
+            case CardCondition.FaceCard:
+                return context.scoringCards.Any(c =>
+                c.value == Rank.Jack ||
+                c.value == Rank.Queen ||
+                c.value == Rank.King);
+
+            case CardCondition.Odd:
+                return context.scoringCards.Any(c =>
+                c.value == Rank.Ace ||
+                c.value == Rank.Nine ||
+                c.value == Rank.Seven ||
+                c.value == Rank.Five ||
+                c.value == Rank.Three);
+            
+            case CardCondition.Even:
+                return context.scoringCards.Any(c =>
+                c.value == Rank.Two ||
+                c.value == Rank.Four ||
+                c.value == Rank.Six ||
+                c.value == Rank.Eight ||
+                c.value == Rank.Ten);
+            
+            case CardCondition.SpecificRank:
+                return context.scoringCards.Any(c =>
+                c.value == joker.targetRank);
+
+            case CardCondition.SpecificSuit:
+                return context.scoringCards.Any(c =>
+                c.suit == joker.targetSuit);
+            
+            case CardCondition.SpecificHand:
+            
+                if (context.handRank != joker.targetHand)
+                    return false;
+
+                if (joker.requiresAce)
+                    return context.scoringCards.Any(c => c.value == Rank.Ace);
+
+                return true;
+                
+            default:
+                return true;
+        }
+    }
+
+    public float GetBaseChipValue(CardData card)
+    {
+        switch (card.value)
+        {
+            case Rank.Ace: return 11;
+            case Rank.King: return 10;
+            case Rank.Queen: return 10;
+            case Rank.Jack: return 10;
+            default: return (int)card.value;
+        }
     }
 
     public int ApplyMultModifiers(int mult, CardData card)

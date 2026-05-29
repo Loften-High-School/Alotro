@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class JokerSystem : MonoBehaviour
@@ -64,7 +65,13 @@ public class JokerSystem : MonoBehaviour
         }
     }
 
-    public bool DoesCardMatch(JokerData joker, CardData card)
+    public class HandContext
+    {
+        public HandRank handRank;
+        public List<CardData> scoringCards;
+    }
+
+    public bool DoesCardMatch(JokerData joker, CardData card, HandContext context)
     {
         switch (joker.condition)
         {
@@ -95,6 +102,14 @@ public class JokerSystem : MonoBehaviour
 
             case CardCondition.SpecificSuit:
                 return card.suit == joker.targetSuit;
+
+            case CardCondition.SpecificHand:
+                if (joker.requiresAce)
+                {
+                    return context.handRank == joker.targetHand && context.scoringCards.Any(c => c.value == Rank.Ace);
+                }
+                
+                return context.handRank == joker.targetHand;
 
             default:
                 return false;

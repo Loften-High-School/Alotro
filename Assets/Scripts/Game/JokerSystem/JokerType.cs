@@ -29,5 +29,6 @@ public enum CardCondition
     Odd,
     Even,
     SpecificRank,
-    SpecificSuit
+    SpecificSuit,
+    SpecificHand
 }

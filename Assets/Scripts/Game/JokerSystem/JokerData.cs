@@ -18,6 +18,9 @@ public class JokerData
     public CardCondition condition;
     public Rank targetRank;
     public Suit targetSuit;
+    public HandRank targetHand;
+
+    public bool requiresAce;
 
     public bool isSelected;
 }

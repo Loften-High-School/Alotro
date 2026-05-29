@@ -19,11 +19,13 @@ MonoBehaviour:
     price: 2
     rarity: Common
     value: 4
-    type: 0
-    activation: 4
-    condition: 0
+    type: 5
+    activation: 1
+    condition: 6
     targetRank: 0
     targetSuit: 0
+    targetHand: 4
+    requiresAce: 1
     isSelected: 0
   - jokerName: Hanging Chad
     description: 
@@ -31,11 +33,13 @@ MonoBehaviour:
     price: 4
     rarity: Common
     value: 2
-    type: 0
-    activation: 2
-    condition: 1
+    type: 5
+    activation: 1
+    condition: 0
     targetRank: 0
     targetSuit: 0
+    targetHand: 0
+    requiresAce: 0
     isSelected: 0
   - jokerName: Brainstrom
     description: 
@@ -43,11 +47,13 @@ MonoBehaviour:
     price: 10
     rarity: Rare
     value: 10
-    type: 0
+    type: 5
     activation: 5
-    condition: 0
+    condition: 3
     targetRank: 0
     targetSuit: 0
+    targetHand: 0
+    requiresAce: 0
     isSelected: 0
   - jokerName: Blueprint
     description: 
@@ -55,9 +61,11 @@ MonoBehaviour:
     price: 10
     rarity: Rare
     value: 1
-    type: 0
-    activation: 4
-    condition: 2
+    type: 5
+    activation: 1
+    condition: 5
     targetRank: 0
     targetSuit: 0
+    targetHand: 0
+    requiresAce: 0
     isSelected: 0
