@@ -10086,6 +10086,7 @@ MonoBehaviour:
   jokerDatabase: {fileID: 11400000, guid: 532f851cc2bdbed46a8220af1d6ab277, type: 2}
   PGI: {fileID: 1030629548}
   jokerSystem: {fileID: 915656873}
+  HM: {fileID: 1862818638}
   jokerArea: {fileID: 568185830}
   jokerPrefab: {fileID: 7922971157555651730, guid: 0ac2b274ad40ba740942f4625499e9fe, type: 3}
   ownedJokers: []

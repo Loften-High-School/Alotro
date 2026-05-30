@@ -123,7 +123,7 @@ public class HandManager : MonoBehaviour
         return 0; // test value for now
     }
 
-    string GetHandDisplayName(HandRank rank)
+    public string GetHandDisplayName(HandRank rank)
     {
         switch (rank)
         {

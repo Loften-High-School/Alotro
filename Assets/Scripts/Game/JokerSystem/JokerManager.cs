@@ -9,6 +9,7 @@ public class JokerManager : MonoBehaviour
     public JokerDatabase jokerDatabase;
     public PlayerGameInfo PGI;
     public JokerSystem jokerSystem;
+    public HandManager HM;
 
     [Header("Objects"), Space]
     public Transform jokerArea; // UI parent (like handArea)
@@ -187,7 +188,10 @@ public class JokerManager : MonoBehaviour
     private HandRank GetRandomHandRank()
     {
         var values = System.Enum.GetValues(typeof(HandRank));
-        return (HandRank)values.GetValue(Random.Range(0, values.Length));
+        var randomHand = (HandRank)values.GetValue(Random.Range(0, values.Length));
+        Debug.Log($"<color=#FF0081>Jokers:</color> Play a <color=#FF0081>{HM.GetHandDisplayName(randomHand)}</color> this round"); // color = neon Rose or bubblegum bright
+        return randomHand;
+        
     }
 
     bool DoesJokerMeetCondition(JokerData joker , JokerSystem.HandContext context)

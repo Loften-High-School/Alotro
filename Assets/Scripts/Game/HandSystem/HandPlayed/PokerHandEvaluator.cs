@@ -61,19 +61,27 @@ public static class PokerHandEvaluator
         // SPECIAL HANDS FIRST
         // =========================
 
-        // Five of a Kind
-        if (valueGroups.Count >= 1 && valueGroups[0].Count() == 5)
-        {
-            result.rank = HandRank.FiveOfAKind;
-            result.scoringCards = valueGroups[0].ToList();
-            return result;
-        }
-
         // Flush Five (5 same value AND flush)
         if (valueGroups.Count >= 1 && valueGroups[0].Count() == 5 && isFlush)
         {
             result.rank = HandRank.FlushFive;
             result.scoringCards = cards;
+            return result;
+        }
+
+        // Flush House (Full House but all same suit)
+        if (isFlush && valueGroups[0].Count() == 3 && valueGroups[1].Count() == 2)
+        {
+            result.rank = HandRank.FlushHouse;
+            result.scoringCards = cards;
+            return result;
+        }
+        
+        // Five of a Kind
+        if (valueGroups.Count >= 1 && valueGroups[0].Count() == 5)
+        {
+            result.rank = HandRank.FiveOfAKind;
+            result.scoringCards = valueGroups[0].ToList();
             return result;
         }
 
@@ -94,13 +102,7 @@ public static class PokerHandEvaluator
             return result;
         }
 
-        // Flush House (Full House but all same suit)
-        if (isFlush && valueGroups[0].Count() == 3 && valueGroups[1].Count() == 2)
-        {
-            result.rank = HandRank.FlushHouse;
-            result.scoringCards = cards;
-            return result;
-        }
+        
 
         // =========================
         // STANDARD HANDS
@@ -142,7 +144,7 @@ public static class PokerHandEvaluator
         }
 
         // Three of a Kind
-        if (valueGroups[0].Count() == 3)
+        if (valueGroups.Count >= 1 && valueGroups[0].Count() == 3)
         {
             result.rank = HandRank.ThreeOfAKind;
             result.scoringCards = valueGroups[0].ToList();
