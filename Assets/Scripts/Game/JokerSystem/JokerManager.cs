@@ -43,7 +43,7 @@ public class JokerManager : MonoBehaviour
             Debug.LogError($"Joker is NULL at index {index}");
             return;
         }
-
+        InitializeJoker(data);
         SpawnJoker(data);
     }
 
@@ -114,8 +114,7 @@ public class JokerManager : MonoBehaviour
         
     }
 
-    
-    public float ApplyChipsOnScoredJokers(CardData card, JokerSystem.HandContext context)
+    public float ApplyChipsOnScoredJokers(CardData card, JokerSystem.HandContext context) // Get Rid Of Soon
     {
         float chips = GetBaseChipValue(card);
 
@@ -143,7 +142,6 @@ public class JokerManager : MonoBehaviour
         return chips;
     }
     
-
     public void OnPlayedJoker(List<CardData> cards, JokerSystem.HandContext context)
     {
 
@@ -163,7 +161,7 @@ public class JokerManager : MonoBehaviour
             switch (joker.type)
             {
                 case JokerType.Effect:
-                    OnPlayedEffects(); // Later add arguments like: joker, card, context
+                    OnPlayedEffects(joker); // Later add arguments like: joker, card, context
                     break;
                 
                 case JokerType.Economy:
@@ -173,9 +171,23 @@ public class JokerManager : MonoBehaviour
         }
     }
 
-    void OnPlayedEffects() // Not here yet
+    void OnPlayedEffects(JokerData joker) // Not here yet
     {
         
+    }
+
+    public void InitializeJoker(JokerData joker)
+    {
+        if (joker.useRandomTargetHand)
+        {
+            joker.targetHand = GetRandomHandRank();
+        }
+    }
+
+    private HandRank GetRandomHandRank()
+    {
+        var values = System.Enum.GetValues(typeof(HandRank));
+        return (HandRank)values.GetValue(Random.Range(0, values.Length));
     }
 
     bool DoesJokerMeetCondition(JokerData joker , JokerSystem.HandContext context)
@@ -240,25 +252,5 @@ public class JokerManager : MonoBehaviour
             case Rank.Jack: return 10;
             default: return (int)card.value;
         }
-    }
-
-    public int ApplyMultModifiers(int mult, CardData card)
-    {
-        foreach (var joker in ownedJokers)
-        {
-            //mult = jokerSystem.ApplyMult(mult, card);
-        }
-
-        return mult;
-    }
-
-    public double ApplyXMultModifiers(double xmult, CardData card)
-    {
-        foreach (var joker in ownedJokers)
-        {
-            //xmult = jokerSystem.ApplyXMult(xmult, card);;
-        }
-
-        return xmult;
     }
 }

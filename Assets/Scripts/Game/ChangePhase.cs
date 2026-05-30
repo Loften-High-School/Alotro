@@ -8,6 +8,7 @@ public class ChangePhase : MonoBehaviour
     public PlayHand PH;
     public HandManager HM;
     public PlayerGameInfo PGI;
+    public JokerManager JM;
 
     [Header("Game Board")] [Space]
     // Central GameObjects
@@ -111,6 +112,11 @@ public class ChangePhase : MonoBehaviour
                 CashOut.SetActive(true);
                 Shop.SetActive(false);
                 Booster.SetActive(false);
+
+                foreach (var joker in JM.ownedJokers)
+                {
+                    JM.InitializeJoker(joker);
+                }
                 break;
             case 4: // Shop Phase
                 PhaseCB.SetActive(false);

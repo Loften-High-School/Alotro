@@ -14,12 +14,15 @@ public class JokerData
 
     public JokerType type;
     public Activation activation;
+
+    public int effectNumber;
     
     public CardCondition condition;
     public Rank targetRank;
     public Suit targetSuit;
     public HandRank targetHand;
 
+    public bool useRandomTargetHand;
     public bool requiresAce;
 
     public bool isSelected;
