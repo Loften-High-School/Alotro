@@ -5,6 +5,8 @@ using System;
 using TMPro;
 using System.Linq;
 using Unity.Mathematics;
+using Microsoft.Unity.VisualStudio.Editor;
+using UnityEngine.UI;
 
 public class HandManager : MonoBehaviour
 {
@@ -225,8 +227,8 @@ public class HandManager : MonoBehaviour
 
             float chipValue = 0;
             chipValue = JM.ApplyChipsOnScoredJokers(card, context);
-            int multValue = 0;
-            double xMultValue = 0;
+            int multValue = 2;
+            double xMultValue = 4;
 
             // -------------------------
             // CHIPS
@@ -236,7 +238,7 @@ public class HandManager : MonoBehaviour
                 c.GetComponent<CardDisplay>().cardData == card
             );
 
-            ShowFloatingText(chips.transform, "+" + chipValue);
+            ShowFloatingText(chips.transform, "+" + chipValue, false);
 
             yield return new WaitForSeconds(1.3f);
 
@@ -246,12 +248,12 @@ public class HandManager : MonoBehaviour
             if (multValue != 0)
             {
                 PGI.mult += multValue;
-                ShowFloatingText(cards[i].transform, "+" + multValue);
+                // ShowFloatingText(cards[i].transform, "+" + multValue, true);
                 GameObject mult = cards.First(c =>
                     c.GetComponent<CardDisplay>().cardData == card
                 );
 
-                ShowFloatingText(mult.transform, "+" + multValue);
+                ShowFloatingText(mult.transform, "+" + multValue + " Mult", true);
 
                 yield return new WaitForSeconds(1.3f);
             }
@@ -262,12 +264,12 @@ public class HandManager : MonoBehaviour
             if (xMultValue != 0 && xMultValue != 1)
             {
                 PGI.mult = Math.Round(PGI.mult * xMultValue, 2);
-                ShowFloatingText(cards[i].transform, "x" + xMultValue);
+                // ShowFloatingText(cards[i].transform, "x" + xMultValue, true);
                 GameObject xMult = cards.First(c =>
                     c.GetComponent<CardDisplay>().cardData == card
                 );
 
-                ShowFloatingText(xMult.transform, "+" + xMultValue);
+                ShowFloatingText(xMult.transform, "x" + xMultValue + " Mult", true);
 
                 yield return new WaitForSeconds(1.3f);
             }
@@ -308,19 +310,32 @@ public class HandManager : MonoBehaviour
         DisplayHand();
     }
 
-    void ShowFloatingText(Transform target, string text)
+    void ShowFloatingText(Transform target, string text, bool isMult)
     {
-        GameObject obj = Instantiate(floatingTextPrefab, uiCanvas.transform);
+        GameObject textObj = Instantiate(floatingTextPrefab, uiCanvas.transform);
         GameObject square = Instantiate(floatingSquarePrefab, uiCanvas.transform);
 
-        obj.transform.localScale = Vector3.one;
+        UnityEngine.UI.Image squareColor = square.GetComponent<UnityEngine.UI.Image>();
+        Color32 blueColor = new Color32(0, 125, 255, 224); // #007DFF at 244 opacity
+        Color32 redColor = new Color32(252, 74, 68, 224); // #FC4A44 at 244 opacity
+
+        if (isMult)
+        {
+            squareColor.color = redColor;
+        }
+        else if (!isMult)
+        {
+            squareColor.color = blueColor;
+        }
+
+        textObj.transform.localScale = Vector3.one;
         square.transform.localScale = Vector3.one;
 
-        TMPro.TextMeshProUGUI tmp = obj.GetComponent<TMPro.TextMeshProUGUI>();
+        TextMeshProUGUI tmp = textObj.GetComponent<TextMeshProUGUI>();
         tmp.text = text;
 
         RectTransform canvasRect = uiCanvas.GetComponent<RectTransform>();
-        RectTransform textRect = obj.GetComponent<RectTransform>();
+        RectTransform textRect = textObj.GetComponent<RectTransform>();
         RectTransform squareRect = square.GetComponent<RectTransform>();
 
         // get SCREEN position of card
@@ -344,7 +359,7 @@ public class HandManager : MonoBehaviour
 
         
 
-        Destroy(obj, 0.3f);
+        Destroy(textObj, 0.3f);
     }
 
     IEnumerator FloatUp(RectTransform rt)
